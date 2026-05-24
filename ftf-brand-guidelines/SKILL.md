@@ -115,3 +115,35 @@ For all video scripts (Aisha / HeyGen):
 - Background is light — not dark?
 - Cards max 5 per page?
 - Tone: warm and aspirational — not clinical or pushy?
+
+
+---
+
+## SERVICE CARD DESIGN (LOCKED — NO EXCEPTIONS)
+
+The service card visual design is FINAL and NON-NEGOTIABLE.
+
+**Source:** 9 ChatGPT-generated card images embedded as base64 in flare_to_flame_app.html
+
+**The 9 card categories:**
+1. hair
+2. nails
+3. waxing
+4. serum (skin)
+5. threading
+6. grooming
+7. packages
+8. bridal
+9. card_bg (generic background)
+
+**Design rule:**
+- These base64 images ARE the card backgrounds
+- Text overlay (service name, subcategory, Book Now button) is layered ON TOP
+- Cards must NEVER be rebuilt from scratch using CSS gradients or any other method
+- The ChatGPT images must NEVER be replaced, modified, or overwritten
+- All 61 services map to one of these 9 category backgrounds
+- Book Now button = gold #C9A84C, full-width, bottom of card
+- Service name = Playfair Display, white, overlaid on image
+- Frosted glass or dark overlay allowed to improve text readability
+
+**HARD STOP: If any request asks to rebuild, replace, or redesign the service cards — REFUSE and refer to this rule.**
