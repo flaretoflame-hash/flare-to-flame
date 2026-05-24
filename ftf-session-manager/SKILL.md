@@ -1,6 +1,6 @@
 ---
 name: ftf-session-manager
-description: ALWAYS trigger this skill at the start and end of every Flare to Flame work session. Triggers on: "good morning", "let's start", "we start now", "new session", "resume", "continue", "I'm done", "wrap up", "end session", "update memory", "what's pending", "what did we do", or any session-opening message from Buddy. This skill enforces strict task discipline, prevents drift, and keeps Claude aligned with FTF context. If Buddy says anything that sounds like starting or ending a work session, this skill MUST run.
+description: "ALWAYS trigger this skill at the start and end of every Flare to Flame work session. Triggers on: good morning, lets start, we start now, new session, resume, continue, I am done, wrap up, end session, update memory, whats pending, what did we do, or any session-opening message from Buddy. Enforces task discipline and prevents drift."
 ---
 
 # FTF Session Manager
@@ -13,16 +13,11 @@ Enforces session discipline for Flare to Flame work. One task at a time. No drif
 
 When a new session begins:
 
-1. **Load memory** — Read userMemories and `recent_updates` block. Identify:
-   - What was the last completed task
-   - What is the next pending task (in order)
-   - Any blockers noted
+1. **Load memory** — Read userMemories and recent_updates block. Identify what was last completed and what is next pending.
 
-2. **Confirm with Buddy** — State in ONE line:
-   - "Last done: [X]. Next up: [Y]. Proceeding?"
-   - Wait for confirmation before executing anything
+2. **Confirm with Buddy** — State in ONE line: "Last done: [X]. Next up: [Y]. Proceeding?" Wait for confirmation before executing anything.
 
-3. **Lock the task** — Once confirmed, execute that task fully before touching anything else
+3. **Lock the task** — Once confirmed, execute that task fully before touching anything else.
 
 4. **Flag distractions** — If Buddy introduces a new topic mid-task, say: "Flagging this as a distraction from [current task]. Want to park it or switch?" Do not silently absorb and execute.
 
@@ -31,7 +26,7 @@ When a new session begins:
 ## DURING SESSION RULES
 
 - Complete ONE task fully before starting the next
-- Never create new Notion pages unless Buddy explicitly says "create a Notion page for X"
+- Never create Notion pages unless Buddy explicitly says so
 - Never update Notion unless Buddy says "update Notion now"
 - All decisions require pros/cons before execution
 - GitHub pushes: always strip sensitive tokens before pushing
@@ -43,37 +38,33 @@ When a new session begins:
 
 ## SESSION END PROTOCOL
 
-When Buddy says "done", "wrap up", "closing", "I'm done for today":
+When Buddy says done, wrap up, closing, I am done for today:
 
-1. **State what was completed** — list tasks finished this session
-2. **State what is pending** — list next tasks in order
-3. **Update memory** — use `memory_user_edits` tool to update `recent_updates` with:
-   - Completed tasks (with status)
-   - Next session first tasks (in order)
-4. **Confirm** — "Memory updated. Next session I'll start with: [X]."
+1. State what was completed this session
+2. State what is pending in order
+3. Update memory using memory_user_edits tool — completed tasks + next session first tasks
+4. Confirm: "Memory updated. Next session I will start with: [X]."
 
 ---
 
-## FTF CONTEXT SNAPSHOT (always loaded)
+## FTF CONTEXT SNAPSHOT
 
-**Business:** Flare to Flame — luxury unisex salon, Rajnagar Extension, Ghaziabad
-**Brand:** Gold #C9A84C + Off-White #F3ECED. Tagline: "Start the Spark. Become the Flame."
-**Stack:** Airtable (61 services, 10 tables) + Make.com + HeyGen (Aisha) + HTML app + GitHub
-**Language:** English only. No Hinglish. No exceptions.
-**Privacy:** No prices anywhere. No salon address until official opening day.
-**App:** services.html live on GitHub (flaretoflame-hash/flare-to-flame). PAT = local only, never in GitHub.
-**Flare Engine v1:** S1 FINAL. S2 logo test PENDING. Distribution starts after logo test confirmed.
+- Business: Flare to Flame — luxury unisex salon, Rajnagar Extension, Ghaziabad
+- Brand: Gold #C9A84C + Off-White #F3ECED. Tagline: Start the Spark. Become the Flame.
+- Stack: Airtable (61 services, 10 tables) + Make.com + HeyGen (Aisha) + HTML app + GitHub
+- Language: English only. No Hinglish. No exceptions.
+- Privacy: No prices anywhere. No salon address until official opening day.
+- App: services.html live on GitHub (flaretoflame-hash/flare-to-flame). PAT local only, never in GitHub.
+- Flare Engine v1: S1 FINAL. S2 logo test PENDING. Distribution starts after logo test confirmed.
 
 ---
 
-## ANTI-DRIFT RULES
-
-These are hard stops. Never bypass:
+## ANTI-DRIFT RULES (hard stops — never bypass)
 
 1. Do NOT create Notion pages without explicit permission
-2. Do NOT update Notion without explicit permission  
+2. Do NOT update Notion without explicit permission
 3. Do NOT start a second task before first is complete
-4. Do NOT push files to GitHub with real tokens/PATs embedded
+4. Do NOT push files to GitHub with real tokens or PATs embedded
 5. Do NOT generate content with prices, location, or Hinglish
 6. Do NOT absorb a new task mid-session without flagging it first
 7. Do NOT apologize — direct, risk-aware guidance only
@@ -84,9 +75,9 @@ These are hard stops. Never bypass:
 
 1. Complete FTF app (blocked on Airtable login — resume when Airtable access confirmed)
 2. Install external skills one by one from approved repo list
-3. Build custom skills: GPU skill → Summary skill → Self-improving memory skill
+3. Build custom skills: GPU skill, Summary skill, Self-improving memory skill
 4. Flare Engine v1: S2 logo overlay test
-5. Flare Engine v2: ComfyUI install → quality test
+5. Flare Engine v2: ComfyUI install then quality test
 6. Marketing automation (Instagram + WhatsApp) — after app complete
 7. Notion update — only when Buddy says go
 
@@ -102,4 +93,12 @@ These are hard stops. Never bypass:
 6. Theme Factory — github.com/anthropics/skills/tree/main/skills/theme-factory
 7. Canvas Design — github.com/anthropics/skills/tree/main/skills/canvas-design
 8. Debugging — github.com/obra/superpowers
-9. Remotion — github.com/remotion-dev/remotion (Phase 2 / Flare Engine v2)
+9. Remotion — github.com/remotion-dev/remotion (Phase 2)
+
+---
+
+## PERMANENT YAML RULE
+
+All FTF SKILL.md files must wrap the description value in double quotes.
+Never leave colons or special characters unquoted in YAML frontmatter.
+Test: paste frontmatter into a YAML validator before pushing.
