@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flare to Flame â€” Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --gold:#C9A84C;
+  --cream:#F3ECED;
+  --dark:#2C2C2C;
+  --muted:rgba(44,44,44,0.62);
+}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--cream);
+  min-height:100vh;
+  color:var(--dark);
+}
+
+/* â”€â”€ HEADER â”€â”€ */
+.header{
+  background:#fff;
+  padding:14px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(201,168,76,0.15);
+  box-shadow:0 1px 10px rgba(0,0,0,0.05);
+  position:sticky;
+  top:0;
+  z-index:200;
+}
+.header-left{display:flex;align-items:center;gap:12px;}
+.logo-img{
+  width:40px;height:40px;border-radius:50%;
+  object-fit:cover;border:2px solid var(--gold);
+  flex-shrink:0;
+}
+.brand-name{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:700;
+  color:var(--dark);letter-spacing:-0.2px;
+}
+.brand-sub{
+  font-size:10px;color:var(--gold);
+  font-style:italic;letter-spacing:0.4px;
+}
+
+/* â”€â”€ SERVICES HEADER â”€â”€ */
+.svc-head{
+  max-width:680px;margin:0 auto;
+  padding:28px 20px 0;width:100%;
+}
+.svc-heading{
+  font-family:'Playfair Display',serif;
+  font-size:30px;font-weight:700;
+  color:var(--dark);margin-bottom:5px;
+}
+.svc-sub{
+  font-family:'Playfair Display',serif;
+  font-size:13px;font-style:italic;
+  color:var(--gold);margin-bottom:22px;
+  letter-spacing:0.3px;
+}
+.search-input{
+  width:100%;padding:14px 18px;
+  border:1.5px solid rgba(201,168,76,0.22);
+  border-radius:14px;background:#fff;
+  font-size:14px;font-family:'Outfit',sans-serif;
+  color:var(--dark);margin-bottom:12px;
+  transition:border-color .2s;
+}
+.search-input:focus{outline:none;border-color:var(--gold);}
+.search-input::placeholder{color:#bbb;}
+
+.filter-row{display:flex;gap:10px;margin-bottom:4px;}
+.filter-sel{
+  flex:1;padding:12px 14px;
+  border:1.5px solid rgba(201,168,76,0.22);
+  border-radius:12px;background:#fff;
+  font-family:'Outfit',sans-serif;
+  font-size:13px;color:#555;
+  cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C9A84C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 13px center;
+  padding-right:34px;
+  transition:border-color .2s;
+}
+.filter-sel:focus{outline:none;border-color:var(--gold);}
+
+/* â”€â”€ CARDS GRID â”€â”€ */
+.cards-wrap{
+  max-width:680px;
+  margin:20px auto 0;
+  padding:0 20px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* â”€â”€ SERVICE CARD â”€â”€ */
+.service-card{
+  position:relative;
+  border-radius:22px;
+  overflow:hidden;
+  min-height:290px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 10px 40px rgba(0,0,0,0.11),
+             0 2px 8px rgba(0,0,0,0.06);
+  transition:transform .38s cubic-bezier(.22,.68,0,1.2),
+             box-shadow .38s ease;
+  cursor:pointer;
+}
+.service-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 56px rgba(0,0,0,0.16),
+             0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Background: cinematic PNG â€” DO NOT MODIFY */
+.card-cinematic{
+  position:absolute;
+  inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:left center;
+  z-index:0;
+}
+.card-fallback{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+
+/* Layer 1: Frosted glass overlay */
+.card-glass{
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:1;
+}
+
+/* Bottom gradient â€” improves text legibility without touching the image */
+.card-vignette{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:60%;
+  background:linear-gradient(to top,rgba(243,236,237,0.55),transparent);
+  z-index:1;
+  pointer-events:none;
+}
+
+/* Content: Layers 2â€“5 */
+.card-body{
+  position:relative;
+  z-index:2;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:24px 24px 14px;
+  gap:9px;
+}
+
+/* Layer 2: Category label */
+.card-cat{
+  font-family:'Outfit',sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:2.8px;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+
+/* Layer 3: Service name */
+.card-name{
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--dark);
+  line-height:1.2;
+  letter-spacing:-0.3px;
+}
+
+/* Layer 4: Experience Detail */
+.card-detail{
+  font-family:'Playfair Display',serif;
+  font-size:13px;
+  font-style:italic;
+  color:var(--muted);
+  line-height:1.68;
+  max-width:420px;
+}
+
+/* Layer 5: Mood words â€” gold Â· dot separated */
+.card-mood{
+  font-family:'Outfit',sans-serif;
+  font-size:11px;
+  color:var(--gold);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0;
+  margin-top:2px;
+}
+.mood-dot{opacity:0.45;padding:0 5px;}
+
+/* spacer to push button down */
+.card-spacer{flex:1;}
+
+/* Layer 6: Full-width "Book your Slot" button */
+.card-book{
+  position:relative;
+  z-index:3;
+  display:block;
+  width:100%;
+  background:var(--gold);
+  color:#fff;
+  text-align:center;
+  padding:17px 20px;
+  font-family:'Outfit',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:3.5px;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:background .22s, letter-spacing .22s;
+  border:none;cursor:pointer;
+}
+.card-book:hover{
+  background:#b89030;
+  letter-spacing:4.5px;
+}
+
+/* â”€â”€ PAGINATION â”€â”€ */
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  padding:28px 20px 24px;
+  flex-wrap:wrap;
+  max-width:680px;
+  margin:0 auto;
+}
+.pg-btn{
+  width:40px;height:40px;
+  border:none;background:#fff;
+  border-radius:10px;cursor:pointer;
+  font-size:13px;font-weight:500;
+  font-family:'Outfit',sans-serif;
+  color:#666;
+  box-shadow:0 2px 10px rgba(0,0,0,0.07);
+  transition:all .2s ease;
+}
+.pg-btn.active{
+  background:var(--dark);color:#fff;
+  box-shadow:0 4px 14px rgba(44,44,44,0.25);
+}
+.pg-btn:hover:not(.active){
+  background:rgba(201,168,76,0.12);
+  color:var(--gold);
+}
+
+/* â”€â”€ FOOTER â”€â”€ */
+.footer{
+  background:var(--dark);
+  padding:26px 24px;
+  text-align:center;
+  margin-top:8px;
+}
+.footer-brand{
+  font-family:'Playfair Display',serif;
+  font-size:15px;color:var(--gold);
+  letter-spacing:0.4px;
+}
+.footer-line{
+  width:30px;height:1px;
+  background:var(--gold);
+  margin:12px auto;opacity:0.28;
+}
+.footer-sub{
+  font-size:10px;color:#3a3a3a;
+  letter-spacing:0.4px;
+}
+
+/* â”€â”€ WHATSAPP FAB â”€â”€ */
+.wa-fab{
+  position:fixed;
+  bottom:24px;right:20px;
+  z-index:999;
+  width:58px;height:58px;
+  background:#25D366;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 22px rgba(37,211,102,0.45);
+  text-decoration:none;
+  transition:transform .25s cubic-bezier(.22,.68,0,1.2),
+             box-shadow .25s ease;
+}
+.wa-fab:hover{
+  transform:scale(1.1);
+  box-shadow:0 8px 32px rgba(37,211,102,0.55);
+}
+
+/* â”€â”€ STATE MESSAGES â”€â”€ */
+.state-msg{
+  text-align:center;
+  padding:64px 20px;
+  font-family:'Playfair Display',serif;
+  font-size:16px;
+  color:var(--gold);
+  font-style:italic;
+}
+.state-empty{
+  text-align:center;
+  padding:64px 20px;
+  font-size:14px;
+  color:#aaa;
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+}
+
+/* â”€â”€ RESPONSIVE â”€â”€ */
+@media(max-width:600px){
+  .svc-heading{font-size:24px;}
+  .filter-row{flex-direction:column;gap:8px;}
+  .cards-wrap{padding:0 14px;}
+  .svc-head{padding:22px 14px 0;}
+  .card-name{font-size:20px;}
+  .card-body{padding:20px 18px 12px;}
+  .card-book{padding:15px;letter-spacing:2.5px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <img class="logo-img"
+         src="https://res.cloudinary.com/dlstvhspu/image/upload/flare_to_flame_logo_final_master_qosqoy"
+         alt="Flare to Flame"
+         onerror="this.style.display='none'">
+    <div>
+      <div class="brand-name">Flare to Flame</div>
+      <div class="brand-sub">Luxury Unisex Salon</div>
+    </div>
+  </div>
+</header>
+
+<!-- SERVICES HEADING + FILTERS -->
+<section class="svc-head">
+  <h1 class="svc-heading">Our Services</h1>
+  <p class="svc-sub">Because Details Define You</p>
+  <input type="text" id="search" class="search-input" placeholder="&#x1F50D; Search services...">
+  <div class="filter-row">
+    <select id="cat-sel" class="filter-sel">
+      <option value="">All Categories</option>
+      <option>Hair</option>
+      <option>Skin</option>
+      <option>Makeup</option>
+      <option>Grooming</option>
+      <option>Waxing</option>
+      <option>Nails</option>
+      <option>Threading</option>
+      <option>Signature</option>
+    </select>
+    <select id="sub-sel" class="filter-sel">
+      <option value="">All Subcategories</option>
+    </select>
+  </div>
+</section>
+
+<!-- CARDS GRID -->
+<div class="cards-wrap" id="cards-grid">
+  <div class="state-msg">Loading servicesâ€¦</div>
+</div>
+
+<!-- PAGINATION -->
+<div class="pagination" id="pag"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">Flare to Flame</div>
+  <div class="footer-line"></div>
+  <div class="footer-sub">Open 8AM â€“ 8PM, Every Day &nbsp;Â·&nbsp; Where precision meets transformation</div>
+</footer>
+
+<!-- WHATSAPP FAB (fixed bottom right) -->
+<a class="wa-fab"
+   href="https://wa.me/919718831333?text=Hi! I'd like to book a service at Flare to Flame."
+   target="_blank"
+   title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- CINEMATIC IMAGES â€” loaded from app_1 reference -->
+<script src="ftf-images.js"></script>
+
+<script>
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CREDENTIALS â€” fill AIRTABLE_TOKEN to go live
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const AIRTABLE_TOKEN = 'YOUR_AIRTABLE_PAT_HERE';
+const BASE_ID        = 'appK1bKgelTKXQKkR';
+const WA             = '919718831333';
+const PER_PAGE       = 5;
+
+/* â”€â”€ CATEGORY â†’ CINEMATIC IMAGE KEY â”€â”€ */
+const CAT_IMG = {
+  'Hair':      'hair',
+  'Skin':      'serum',
+  'Makeup':    'bridal',
+  'Grooming':  'grooming',
+  'Waxing':    'waxing',
+  'Nails':     'nails',
+  'Threading': 'threading',
+  'Signature': 'packages'
+};
+
+/* CSS gradient fallback per category (shown only if IMGS not loaded) */
+const CAT_BG = {
+  'Hair':      'linear-gradient(135deg,#f5e8ff,#d4b8f0)',
+  'Skin':      'linear-gradient(135deg,#fff3e0,#f0d4a0)',
+  'Makeup':    'linear-gradient(135deg,#ffe8f0,#f0b8cc)',
+  'Grooming':  'linear-gradient(135deg,#e0f4ff,#b0d8f0)',
+  'Waxing':    'linear-gradient(135deg,#fff8e0,#f0d890)',
+  'Nails':     'linear-gradient(135deg,#e0ffff,#90d8d8)',
+  'Threading': 'linear-gradient(135deg,#eeeeff,#a8a8cc)',
+  'Signature': 'linear-gradient(135deg,#fff8e0,#e8d080)'
+};
+
+/* â”€â”€ STATE â”€â”€ */
+let services = [], page = 1, filterCat = '', filterSub = '';
+
+/* â”€â”€ FETCH FROM AIRTABLE â”€â”€ */
+async function fetchServices(){
+  const grid = document.getElementById('cards-grid');
+
+  if(AIRTABLE_TOKEN === 'YOUR_AIRTABLE_PAT_HERE'){
+    grid.innerHTML = '<div class="state-msg">Add your Airtable token to load live services.</div>';
+    return;
+  }
+
+  grid.innerHTML = '<div class="state-msg">Loading servicesâ€¦</div>';
+
+  try{
+    const r = await fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/Services?filterByFormula={Active}=1&sort[0][field]=Sort%20Order&sort[0][direction]=asc`,
+      {headers:{Authorization:`Bearer ${AIRTABLE_TOKEN}`}}
+    );
+    const data = await r.json();
+
+    if(!data.records || !data.records.length){
+      grid.innerHTML = '<div class="state-empty">No services available.</div>';
+      return;
+    }
+
+    services = data.records.map(rec => {
+      const f = rec.fields;
+      /* field names: try underscore then space variants */
+      const name   = f['Service_Name']      || f['Service Name']      || '';
+      const detail = f['Experience_Detail'] || f['Experience Detail'] || f['AI Service Description'] || '';
+      const cat    = f['Category']          || '';
+      const sub    = f['Subcategory']       || '';
+      const raw    = f['Mood_Words']        || f['Mood Words']        || f['mood_words'] || '';
+      const mood   = Array.isArray(raw) ? raw
+                   : raw.split(/[,Â·]/).map(m => m.trim()).filter(Boolean);
+      const wa     = f['WhatsApp Link']     || '';
+      return {name, detail, cat, sub, mood, wa};
+    }).filter(s => s.name);
+
+    buildSubDropdown();
+    renderPage();
+  }catch(e){
+    grid.innerHTML = '<div class="state-msg">Connection error â€” check your Airtable token.</div>';
+  }
+}
+
+/* â”€â”€ SUBCATEGORY DROPDOWN â”€â”€ */
+function buildSubDropdown(){
+  const sel = document.getElementById('sub-sel');
+  sel.innerHTML = '<option value="">All Subcategories</option>';
+  const subs = [...new Set(
+    services.filter(s => !filterCat || s.cat === filterCat)
+            .map(s => s.sub)
+            .filter(Boolean)
+  )].sort();
+  subs.forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v; sel.appendChild(o);
+  });
+}
+
+/* â”€â”€ FILTER â”€â”€ */
+function getFiltered(){
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  return services.filter(s =>
+    (!filterCat || s.cat === filterCat) &&
+    (!filterSub || s.sub === filterSub) &&
+    (!q || s.name.toLowerCase().includes(q) || s.detail.toLowerCase().includes(q))
+  );
+}
+
+/* â”€â”€ CARD TEMPLATE â”€â”€ */
+function createCard(s){
+  const imgKey    = CAT_IMG[s.cat] || 'card_bg';
+  const hasImgs   = typeof IMGS !== 'undefined' && IMGS && IMGS[imgKey];
+  const fallbackBg= CAT_BG[s.cat]  || 'linear-gradient(135deg,#f3eced,#e8dada)';
+  const waLink    = s.wa ||
+    `https://wa.me/${WA}?text=Hi! I'd like to book *${encodeURIComponent(s.name)}* at Flare to Flame.`;
+
+  const moodHtml = s.mood.length
+    ? s.mood.map((m, i) =>
+        `${i > 0 ? '<span class="mood-dot">&middot;</span>' : ''}${m}`
+      ).join('')
+    : '';
+
+  const catLabel = s.sub ? `${s.cat} &nbsp;&middot;&nbsp; ${s.sub}` : s.cat;
+
+  return `
+  <div class="service-card">
+    ${hasImgs
+      ? `<img class="card-cinematic" src="${IMGS[imgKey]}" alt="${s.cat}"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`
+      : ''}
+    <div class="card-fallback" style="background:${fallbackBg};${hasImgs?'display:none':''}"></div>
+    <div class="card-glass"></div>
+    <div class="card-vignette"></div>
+    <div class="card-body">
+      <div class="card-cat">${catLabel}</div>
+      <div class="card-name">${s.name}</div>
+      ${s.detail ? `<div class="card-detail">${s.detail}</div>` : ''}
+      ${moodHtml  ? `<div class="card-mood">${moodHtml}</div>` : ''}
+      <div class="card-spacer"></div>
+    </div>
+    <a class="card-book" href="${waLink}" target="_blank">Book your Slot</a>
+  </div>`;
+}
+
+/* â”€â”€ RENDER â”€â”€ */
+function renderPage(){
+  const grid = document.getElementById('cards-grid');
+  const pag  = document.getElementById('pag');
+  const filtered = getFiltered();
+  const paged    = filtered.slice((page-1)*PER_PAGE, page*PER_PAGE);
+
+  grid.innerHTML = paged.length
+    ? paged.map(createCard).join('')
+    : '<div class="state-empty">No services match your search.</div>';
+
+  /* Pagination */
+  const total = Math.ceil(filtered.length / PER_PAGE);
+  pag.innerHTML = '';
+  for(let i = 1; i <= total; i++){
+    const btn = document.createElement('button');
+    btn.className = 'pg-btn' + (i === page ? ' active' : '');
+    btn.textContent = i;
+    btn.onclick = () => { page = i; renderPage(); window.scrollTo({top:0,behavior:'smooth'}); };
+    pag.appendChild(btn);
+  }
+}
+
+/* â”€â”€ EVENTS â”€â”€ */
+document.getElementById('search').oninput = () => { page = 1; renderPage(); };
+document.getElementById('cat-sel').onchange = function(){
+  filterCat = this.value;
+  filterSub = '';
+  page = 1;
+  document.getElementById('sub-sel').value = '';
+  buildSubDropdown();
+  renderPage();
+};
+document.getElementById('sub-sel').onchange = function(){
+  filterSub = this.value; page = 1; renderPage();
+};
+
+/* â”€â”€ INIT â”€â”€ */
+fetchServices();
+</script>
+</body>
+</html>
