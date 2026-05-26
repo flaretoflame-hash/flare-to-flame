@@ -1,26 +1,14 @@
 {
-  "name": "FTF Skills",
-  "description": "Flare to Flame skill collection",
-  "skills": [
+  "name": "ftf-skills",
+  "owner": {
+    "name": "flaretoflame-hash",
+    "url": "https://github.com/flaretoflame-hash"
+  },
+  "plugins": [
     {
-      "name": "future-skills/remotion",
-      "path": "future-skills/remotion"
-    },
-    {
-      "name": "future-skills/notebooklm",
-      "path": "future-skills/notebooklm"
-    },
-    {
-      "name": "future-skills/obsidian",
-      "path": "future-skills/obsidian"
-    },
-    {
-      "name": "future-skills/debugging",
-      "path": "future-skills/debugging"
-    },
-    {
-      "name": "future-skills/excel-xlsx",
-      "path": "future-skills/excel-xlsx"
+      "name": "ftf-future-skills",
+      "description": "Flare to Flame future skills - remotion, notebooklm, obsidian, debugging, excel",
+      "path": "."
     }
   ]
 }
