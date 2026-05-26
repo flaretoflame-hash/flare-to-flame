@@ -1,8 +1,3 @@
----
-name: magic-ftf
-description: 21st.dev Magic MCP skill for Flare to Flame UI components.
----
-
 \# 21st.dev Magic MCP - Flare to Flame
 
 
