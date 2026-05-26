@@ -1,6 +1,6 @@
 ---
 name: gpu-ftf
-description: Local GPU B-roll generation for Flare Engine v2. ComfyUI plus Flux SDXL plus SVD img2vid on NVIDIA 3060 12GB. Triggers on ComfyUI setup, Flux prompt building, SVD workflow, Scene 2 or Scene 4 B-roll generation, GO/NO-GO quality test, FFmpeg stitch, local video pipeline questions.
+description: Local GPU B-roll generation for Flare Engine v2 using ComfyUI and Flux SDXL.
 ---
 
 # GPU — Flare Engine v2 Local B-Roll Skill
