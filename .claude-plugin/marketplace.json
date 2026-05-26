@@ -1,0 +1,26 @@
+{
+  "name": "FTF Skills",
+  "description": "Flare to Flame skill collection",
+  "skills": [
+    {
+      "name": "future-skills/remotion",
+      "path": "future-skills/remotion"
+    },
+    {
+      "name": "future-skills/notebooklm",
+      "path": "future-skills/notebooklm"
+    },
+    {
+      "name": "future-skills/obsidian",
+      "path": "future-skills/obsidian"
+    },
+    {
+      "name": "future-skills/debugging",
+      "path": "future-skills/debugging"
+    },
+    {
+      "name": "future-skills/excel-xlsx",
+      "path": "future-skills/excel-xlsx"
+    }
+  ]
+}
