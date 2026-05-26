@@ -1,6 +1,6 @@
 ---
 name: gpu-ftf
-description: Local GPU B-roll generation for Flare Engine v2 using ComfyUI and Flux SDXL.
+description: Local GPU B-roll generation for Flare Engine v2. NVIDIA 3060 12GB.
 ---
 
 # GPU — Flare Engine v2 Local B-Roll Skill
