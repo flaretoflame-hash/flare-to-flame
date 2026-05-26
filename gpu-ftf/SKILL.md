@@ -1,13 +1,13 @@
 ---
 name: gpu-ftf
-description: "Local GPU B-roll generation skill for Flare Engine v2. ComfyUI + Flux SDXL + SVD on NVIDIA 3060 12GB. Triggers on: ComfyUI setup, Flux prompt building, SVD workflow, Scene 2 or Scene 4 B-roll generation, GO/NO-GO quality test, FFmpeg stitch, local video pipeline questions."
+description: Local GPU B-roll generation for Flare Engine v2. ComfyUI plus Flux SDXL plus SVD img2vid on NVIDIA 3060 12GB. Triggers on ComfyUI setup, Flux prompt building, SVD workflow, Scene 2 or Scene 4 B-roll generation, GO/NO-GO quality test, FFmpeg stitch, local video pipeline questions.
 ---
 
 # GPU — Flare Engine v2 Local B-Roll Skill
 
 ## Purpose
 Guide all local GPU-based B-roll generation for Flare Engine v2.
-Scene 2 and Scene 4 ONLY — HeyGen handles Scene 1 and Scene 3 (Aisha avatar).
+Scene 2 and Scene 4 ONLY. HeyGen handles Scene 1 and Scene 3 (Aisha avatar).
 Free. No cloud costs. Runs entirely on Buddy's machine.
 
 ---
@@ -17,23 +17,21 @@ Free. No cloud costs. Runs entirely on Buddy's machine.
 - Software: ComfyUI + Flux SDXL + SVD img2vid-xt-1-1
 - OS: Windows
 - Cost: Free (local)
-- Estimated generation time: 60–90 min per full video
+- Estimated generation time: 60 to 90 min per full video
 
 ---
 
-## 4-Scene Structure (LOCKED — DO NOT CHANGE)
-| Scene | Source | Content |
-|---|---|---|
-| Scene 1 | HeyGen (Aisha) | Hook — Aisha speaks |
-| Scene 2 | LOCAL GPU | Vulnerability / Environment B-roll |
-| Scene 3 | HeyGen (Aisha) | Transformation — Aisha speaks |
-| Scene 4 | LOCAL GPU | CTA / Result B-roll |
+## 4-Scene Structure (LOCKED)
+- Scene 1: HeyGen (Aisha) — Hook
+- Scene 2: LOCAL GPU — Vulnerability / Environment B-roll
+- Scene 3: HeyGen (Aisha) — Transformation
+- Scene 4: LOCAL GPU — CTA / Result B-roll
 
 ---
 
 ## Master Style Seed (LOCKED — ALWAYS APPEND)
 "luxury Indian salon, warm golden lighting, shallow DOF, bokeh, 35mm film grain"
-NEVER remove this from any Flux prompt. This is the FTF visual signature.
+Never remove this from any Flux prompt. This is the FTF visual signature.
 
 ---
 
@@ -41,7 +39,7 @@ NEVER remove this from any Flux prompt. This is the FTF visual signature.
 1. Install ComfyUI on Windows
 2. Download Flux SDXL checkpoint (safetensors)
 3. Download SVD img2vid-xt-1-1 model
-4. Run a single test generation (1 image → 1 clip)
+4. Run a single test generation (1 image to 1 clip)
 5. Apply GO/NO-GO gate — only proceed if PASS
 6. Integrate into Flare Engine v2 pipeline after GO
 
@@ -49,61 +47,58 @@ NEVER remove this from any Flux prompt. This is the FTF visual signature.
 
 ## GO/NO-GO Quality Gate (MANDATORY BEFORE PIPELINE)
 Test output must pass ALL 5 before proceeding:
-1. Warm golden lighting visible ✅
-2. Bokeh / shallow DOF present ✅
-3. No clinical, sterile, or stock-photo look ✅
-4. Colour temperature matches HeyGen Aisha scenes ✅
-5. SVD motion is smooth — no jitter, no distortion ✅
+1. Warm golden lighting visible
+2. Bokeh / shallow DOF present
+3. No clinical, sterile, or stock-photo look
+4. Colour temperature matches HeyGen Aisha scenes
+5. SVD motion is smooth — no jitter, no distortion
 
-If ANY fail = NO-GO. Fix prompt or model settings. Retest. Never bypass gate.
+If ANY fail = NO-GO. Fix prompt or settings. Retest. Never bypass gate.
 
 ---
 
 ## Flux SDXL Prompt Formula
-[Subject] + [Action] + [Location/Setting] + [Master Style Seed]
+[Subject] + [Action] + [Location] + [Master Style Seed]
 
 Negative prompt (always use):
 "dark background, harsh lighting, generic stock photo, clinical, overexposed, text, watermark, blurry, low quality"
 
 ---
 
-## Scene 2 Prompt Examples (Vulnerability / Environment)
+## Scene 2 Prompt Examples
 - "Indian woman stepping into a luxury salon entrance, warm golden ambient light, shallow depth of field, bokeh background, 35mm film grain"
 - "close-up of tired hands touching dry hair ends, soft warm light, cinematic bokeh, luxury Indian salon, 35mm film grain"
-- "busy city street through salon glass window, soft focus foreground, golden interior light, shallow DOF, film grain"
 
-## Scene 4 Prompt Examples (CTA / Result)
+## Scene 4 Prompt Examples
 - "confident Indian woman smiling at mirror in luxury salon, warm golden glow, shallow DOF, bokeh, 35mm film grain"
 - "salon reception counter with gold accents, soft bokeh background, warm ambient light, cinematic grain"
-- "close-up of freshly styled hair with light catching strands, warm golden backlight, shallow DOF, film grain"
 
 ---
 
-## SVD Workflow (Image → Video)
+## SVD Workflow
 1. Generate still image using Flux SDXL
 2. Feed image into SVD img2vid-xt-1-1 node in ComfyUI
-3. Output: 2–4 second smooth video clip
-4. Export as MP4 (H.264)
+3. Output: 2 to 4 second smooth video clip
+4. Export as MP4 H.264
 5. Hand off to FFmpeg for scene stitching
 
 ---
 
-## FFmpeg Stitch Command (4 Scenes)
-```
+## FFmpeg Stitch Command
 ffmpeg -i scene1_heygen.mp4 -i scene2_svd.mp4 -i scene3_heygen.mp4 -i scene4_svd.mp4 -filter_complex "[0:v][1:v][2:v][3:v]concat=n=4:v=1:a=0" -c:v libx264 -crf 18 output_final.mp4
-```
+
 All scenes must be same resolution and frame rate before stitching.
 
 ---
 
-## Rules (NON-NEGOTIABLE)
-1. Never use cloud B-roll services for Scene 2 and Scene 4 — local GPU only
+## Rules
+1. Never use cloud B-roll for Scene 2 and Scene 4 — local GPU only
 2. Always append master style seed to every Flux prompt
-3. Always run GO/NO-GO gate before pipeline integration — no exceptions
+3. Always run GO/NO-GO gate before pipeline integration
 4. Never change the 4-scene structure
-5. ComfyUI install comes before any prompt engineering — do not skip setup
-6. If VRAM runs out — reduce image resolution first, then batch size
-7. Windows paths use backslash — never use Linux paths in commands
+5. ComfyUI install comes before any prompt engineering
+6. If VRAM runs out — reduce resolution first, then batch size
+7. Windows paths use backslash — never Linux paths in commands
 
 ---
 
