@@ -1,12 +1,16 @@
 {
-  "name": "ftf-skills",
+  "name": "ftf-future-skills",
+  "description": "Flare to Flame future skills - remotion, notebooklm, obsidian, debugging, excel",
   "version": "1.0.0",
-  "description": "Flare to Flame future skills collection",
-  "skills": [
-    "future-skills/remotion",
-    "future-skills/notebooklm",
-    "future-skills/obsidian",
-    "future-skills/debugging",
-    "future-skills/excel-xlsx"
+  "author": {
+    "name": "flaretoflame-hash"
+  },
+  "homepage": "https://github.com/flaretoflame-hash/flare-to-flame",
+  "repository": "https://github.com/flaretoflame-hash/flare-to-flame",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "salon",
+    "ftf"
   ]
 }
