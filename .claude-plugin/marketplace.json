@@ -1,14 +1,18 @@
 {
   "name": "ftf-skills",
+  "description": "Flare to Flame skills marketplace",
   "owner": {
-    "name": "flaretoflame-hash",
-    "url": "https://github.com/flaretoflame-hash"
+    "name": "flaretoflame-hash"
   },
   "plugins": [
     {
       "name": "ftf-future-skills",
-      "description": "Flare to Flame future skills - remotion, notebooklm, obsidian, debugging, excel",
-      "path": "."
+      "description": "Flare to Flame future skills collection",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "flaretoflame-hash"
+      }
     }
   ]
 }
