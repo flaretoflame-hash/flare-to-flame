@@ -1,3 +1,8 @@
+---
+name: impeccable
+description: Zero compromise quality enforcer for Flare to Flame outputs.
+---
+
 \# Impeccable — Zero Compromise Quality for FTF
 
 
