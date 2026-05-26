@@ -1,3 +1,8 @@
+---
+name: stitch-ftf
+description: Google Stitch MCP skill for Flare to Flame mobile screen generation.
+---
+
 \# Google Stitch MCP - Flare to Flame
 
 
