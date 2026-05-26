@@ -1,8 +1,3 @@
----
-name: dev-21
-description: 21st.dev Magic MCP for FTF React TypeScript Tailwind components with brand rules.
----
-
 \# Dev 21 — 21st.dev Magic Advanced for FTF
 
 
