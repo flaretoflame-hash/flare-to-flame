@@ -1,6 +1,6 @@
 ---
 name: ftf-marketing
-description: "Use this skill for ALL Flare to Flame marketing work: Instagram posts, WhatsApp messages, captions, content strategy, content calendar, copywriting, ad creative, service promotions, offers, scripts, or any written output that will reach clients or prospects. Triggers on: post, caption, Instagram, WhatsApp message, content, write, promote, offer, campaign, script, copy, tagline, strategy, calendar, what should I post, or any request to communicate about FTF services. Always apply FTF brand rules. Never use prices, location, or Hinglish."
+description: FTF marketing content generation skill for social media and campaigns.
 ---
 
 # Flare to Flame — Marketing Skill
