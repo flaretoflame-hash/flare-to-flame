@@ -1,6 +1,6 @@
 ---
 name: ftf-session-manager
-description: FTF session manager for tracking tasks and context across sessions.
+description: "ALWAYS trigger this skill at the start and end of every Flare to Flame work session. Triggers on: good morning, lets start, we start now, new session, resume, continue, I am done, wrap up, end session, update memory, whats pending, what did we do, or any session-opening message from Buddy. Enforces task discipline and prevents drift."
 ---
 
 # FTF Session Manager
