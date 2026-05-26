@@ -1,8 +1,3 @@
----
-name: uiux-pro
-description: Luxury UI/UX standards enforcer for Flare to Flame app design.
----
-
 \# UI/UX Pro — Flare to Flame
 
 
