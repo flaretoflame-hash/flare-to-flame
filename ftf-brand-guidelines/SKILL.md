@@ -1,6 +1,6 @@
 ---
 name: ftf-brand-guidelines
-description: "ALWAYS use this skill for any Flare to Flame output that involves colors, fonts, design, content, cards, UI, social media, scripts, or branding. Triggers on: design, card, poster, thumbnail, color, font, style, content, script, app, HTML, social post, Instagram, WhatsApp message, or any visual or written output for FTF. Enforces FTF brand identity automatically."
+description: FTF brand rules for Gold #C9A84C and Off-White #F3ECED palette enforcement.
 ---
 
 # Flare to Flame — Brand Guidelines
