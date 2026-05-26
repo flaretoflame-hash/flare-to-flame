@@ -1,0 +1,12 @@
+{
+  "name": "ftf-skills",
+  "version": "1.0.0",
+  "description": "Flare to Flame future skills collection",
+  "skills": [
+    "future-skills/remotion",
+    "future-skills/notebooklm",
+    "future-skills/obsidian",
+    "future-skills/debugging",
+    "future-skills/excel-xlsx"
+  ]
+}
