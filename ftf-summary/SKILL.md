@@ -1,6 +1,6 @@
 ---
 name: ftf-summary
-description: FTF session summary skill. Use when wrapping up a session, updating memory, or updating Notion.
+description: FTF session summary skill. Use when wrapping up a session or updating memory.
 ---
 
 # FTF Session Summary Skill
