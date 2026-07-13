@@ -1,0 +1,275 @@
+[
+  {
+    "text": "Welcome",
+    "startMs": 0,
+    "endMs": 740,
+    "timestampMs": 460,
+    "confidence": 0.676311
+  },
+  {
+    "text": " to",
+    "startMs": 740,
+    "endMs": 840,
+    "timestampMs": 820,
+    "confidence": 0.938892
+  },
+  {
+    "text": " Fl",
+    "startMs": 840,
+    "endMs": 1040,
+    "timestampMs": 1060,
+    "confidence": 0.255468
+  },
+  {
+    "text": "air",
+    "startMs": 1040,
+    "endMs": 1320,
+    "timestampMs": 1060,
+    "confidence": 0.853191
+  },
+  {
+    "text": " to",
+    "startMs": 1320,
+    "endMs": 1500,
+    "timestampMs": 1360,
+    "confidence": 0.640063
+  },
+  {
+    "text": " Flame",
+    "startMs": 1500,
+    "endMs": 2090,
+    "timestampMs": 1760,
+    "confidence": 0.706046
+  },
+  {
+    "text": ",",
+    "startMs": 2090,
+    "endMs": 2130,
+    "timestampMs": 2360,
+    "confidence": 0.0939198
+  },
+  {
+    "text": " this",
+    "startMs": 2130,
+    "endMs": 2400,
+    "timestampMs": 2420,
+    "confidence": 0.548612
+  },
+  {
+    "text": " video",
+    "startMs": 2400,
+    "endMs": 2740,
+    "timestampMs": 2780,
+    "confidence": 0.352769
+  },
+  {
+    "text": " demonstrates",
+    "startMs": 2740,
+    "endMs": 3580,
+    "timestampMs": 3360,
+    "confidence": 0.884568
+  },
+  {
+    "text": " the",
+    "startMs": 3580,
+    "endMs": 3740,
+    "timestampMs": 3820,
+    "confidence": 0.944081
+  },
+  {
+    "text": " emotion",
+    "startMs": 3740,
+    "endMs": 4130,
+    "timestampMs": 4240,
+    "confidence": 0.133323
+  },
+  {
+    "text": " audio",
+    "startMs": 4130,
+    "endMs": 4680,
+    "timestampMs": 4680,
+    "confidence": 0.490807
+  },
+  {
+    "text": " cross",
+    "startMs": 4680,
+    "endMs": 4990,
+    "timestampMs": 5060,
+    "confidence": 0.795203
+  },
+  {
+    "text": "f",
+    "startMs": 4990,
+    "endMs": 5040,
+    "timestampMs": 5280,
+    "confidence": 0.228433
+  },
+  {
+    "text": "ain",
+    "startMs": 5040,
+    "endMs": 5250,
+    "timestampMs": 5280,
+    "confidence": 0.219396
+  },
+  {
+    "text": " pipeline",
+    "startMs": 5250,
+    "endMs": 5770,
+    "timestampMs": 5920,
+    "confidence": 0.910896
+  },
+  {
+    "text": ".",
+    "startMs": 5770,
+    "endMs": 6000,
+    "timestampMs": 6500,
+    "confidence": 0.437465
+  },
+  {
+    "text": " The",
+    "startMs": 6000,
+    "endMs": 6260,
+    "timestampMs": 6580,
+    "confidence": 0.463277
+  },
+  {
+    "text": " quick",
+    "startMs": 6260,
+    "endMs": 6790,
+    "timestampMs": 6880,
+    "confidence": 0.455726
+  },
+  {
+    "text": " round",
+    "startMs": 6790,
+    "endMs": 7200,
+    "timestampMs": 7240,
+    "confidence": 0.773937
+  },
+  {
+    "text": "f",
+    "startMs": 7200,
+    "endMs": 7200,
+    "timestampMs": 7620,
+    "confidence": 0.156129
+  },
+  {
+    "text": "ark",
+    "startMs": 7200,
+    "endMs": 7470,
+    "timestampMs": 7620,
+    "confidence": 0.183506
+  },
+  {
+    "text": " st",
+    "startMs": 7470,
+    "endMs": 7630,
+    "timestampMs": 8040,
+    "confidence": 0.184458
+  },
+  {
+    "text": "umps",
+    "startMs": 7630,
+    "endMs": 7970,
+    "timestampMs": 8040,
+    "confidence": 0.345952
+  },
+  {
+    "text": " over",
+    "startMs": 7970,
+    "endMs": 8320,
+    "timestampMs": 8400,
+    "confidence": 0.991641
+  },
+  {
+    "text": " the",
+    "startMs": 8320,
+    "endMs": 8580,
+    "timestampMs": 8620,
+    "confidence": 0.254581
+  },
+  {
+    "text": " lazy",
+    "startMs": 8580,
+    "endMs": 8930,
+    "timestampMs": 8920,
+    "confidence": 0.987978
+  },
+  {
+    "text": " n",
+    "startMs": 8930,
+    "endMs": 9010,
+    "timestampMs": 9380,
+    "confidence": 0.630648
+  },
+  {
+    "text": "og",
+    "startMs": 9010,
+    "endMs": 9180,
+    "timestampMs": 9560,
+    "confidence": 0.439693
+  },
+  {
+    "text": ".",
+    "startMs": 9180,
+    "endMs": 9500,
+    "timestampMs": 10100,
+    "confidence": 0.758193
+  },
+  {
+    "text": " Capt",
+    "startMs": 9500,
+    "endMs": 9780,
+    "timestampMs": 10160,
+    "confidence": 0.202237
+  },
+  {
+    "text": "ions",
+    "startMs": 9780,
+    "endMs": 10060,
+    "timestampMs": 10380,
+    "confidence": 0.880901
+  },
+  {
+    "text": " are",
+    "startMs": 10060,
+    "endMs": 10270,
+    "timestampMs": 10720,
+    "confidence": 0.986491
+  },
+  {
+    "text": " generated",
+    "startMs": 10270,
+    "endMs": 10910,
+    "timestampMs": 11080,
+    "confidence": 0.991108
+  },
+  {
+    "text": " automatically",
+    "startMs": 10910,
+    "endMs": 11820,
+    "timestampMs": 11700,
+    "confidence": 0.990007
+  },
+  {
+    "text": " using",
+    "startMs": 11820,
+    "endMs": 12170,
+    "timestampMs": 12280,
+    "confidence": 0.997685
+  },
+  {
+    "text": " whisper",
+    "startMs": 12170,
+    "endMs": 13000,
+    "timestampMs": 12660,
+    "confidence": 0.52821
+  },
+  {
+    "text": ".",
+    "startMs": 13000,
+    "endMs": 13000,
+    "timestampMs": 12980,
+    "confidence": 0.953899
+  }
+]
