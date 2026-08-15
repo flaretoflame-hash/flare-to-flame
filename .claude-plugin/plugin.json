@@ -12,5 +12,6 @@
     "skills",
     "salon",
     "ftf"
-  ]
+  ],
+  "skills": "./skills"
 }
