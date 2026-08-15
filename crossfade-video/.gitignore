@@ -5,4 +5,7 @@ dist
 
 # Ignore the output video from Git but not videos you import into src/.
 out
-whisper.cpp
+whisper.cpp/*
+!whisper.cpp/models/
+whisper.cpp/models/*
+!whisper.cpp/models/ggml-tiny.en.bin
