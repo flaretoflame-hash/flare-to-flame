@@ -1,17 +1,19 @@
 ---
 name: gpu-ftf
-description: Local GPU generation status + stack tracker for Flare to Flame. NVIDIA 3060 12GB. Covers the current PROVEN pipeline (InstantID + SVD-XT) and the CANDIDATE pipeline under A/B test (PuLID + Wan 2.2), so this file stops going stale every time the stack moves.
+description: Local GPU generation status + stack tracker for Flare to Flame. NVIDIA 3060 12GB. ACTIVE pipeline is PuLID + Wan 2.2 (A/B test concluded, confirmed by Buddy 27 Aug 2026). InstantID + SVD-XT is now LEGACY (previously proven, superseded). This file stops going stale every time the stack moves.
 ---
 
-# GPU - Flare to Flame Local Generation Skill (v2, corrected 24 Jul 2026)
+# GPU - Flare to Flame Local Generation Skill (v3, A/B test concluded 27 Aug 2026)
 
 ## Why this file was rewritten
 The previous version of this file was badly out of date — it still said "ComfyUI: NOT YET
 INSTALLED" and described an old Flux SDXL + 4-scene HeyGen-hybrid model that no longer
 reflects reality. Real status as of 24 Jul 2026, confirmed via a live ComfyUI MCP bridge
 health-check: ComfyUI 0.14.1, RTX 3060 (11/12GB VRAM free), PyTorch 2.10.0+cu130, running at
-`http://127.0.0.1:8188`. This file now tracks BOTH pipelines below instead of hardcoding one,
-so it doesn't drift again the next time the stack changes.
+`http://127.0.0.1:8188`. That version tracked both pipelines side by side pending the A/B
+result. **Buddy has now confirmed the result: PuLID + Wan 2.2 is the ACTIVE pipeline.**
+Everything downstream should point to it from here — InstantID + SVD-XT stays in this file
+as LEGACY reference only, not as an active target.
 
 ---
 
@@ -26,30 +28,35 @@ so it doesn't drift again the next time the stack changes.
 
 ---
 
-## PROVEN Pipeline (working today) — InstantID + SVD-XT
-- Face-lock: InstantID (ControlNet-based), identity weight being tuned toward 1.0
-- Checkpoint: DreamShaperXL (`dreamshaperXL_alpha2Xl10`)
-- Video: SVD img2vid-xt-1-1 (SVD-XT)
-- Frame smoothing: RIFE (installed)
-- This is what `conductor/script-to-shotlist.mjs` in `ftf-coworkers` generates prompts for
-  today (Aisha Visual DNA library, live-read, all 6 beats — not just B-roll scenes).
-
-## CANDIDATE Pipeline (installed, under A/B test, NOT YET DECIDED) — PuLID + Wan 2.2
+## ACTIVE Pipeline (confirmed 27 Aug 2026) — PuLID + Wan 2.2
 - Face-lock: PuLID (`cubiq/PuLID_ComfyUI`, SDXL variant matching DreamShaperXL) +
   InsightFace antelopev2 + EVA-CLIP
 - Video: Wan 2.2 TI2V-5B (text+image->video, native)
 - Upscale: SeedVR2 node installed (`numz/ComfyUI-SeedVR2_VideoUpscaler`), model weights NOT
-  yet downloaded
-- Status: installed, not yet run through a same-image/same-prompt comparison against the
-  proven pipeline. DO NOT treat this as the active pipeline until Buddy confirms the A/B
-  result and explicitly says which one wins.
+  yet downloaded — confirm before relying on upscale in production renders
+- Status: **CONFIRMED ACTIVE by Buddy, 27 Aug 2026.** The A/B test against InstantID+SVD-XT
+  is concluded. This is now the pipeline every coworker, script, and prompt targets —
+  do not default to the legacy pipeline below, and do not re-open the A/B question without
+  a new explicit decision from Buddy.
+- Outstanding follow-up: `conductor/script-to-shotlist.mjs` and `conductor/conductor.mjs`
+  in `ftf-coworkers` still target the old Forge/SDXL API from the legacy pipeline — they
+  need a real rewrite to target Wan 2.2, not a doc-only pointer swap. Flagged, not yet done.
 
-## A/B Test Plan (from the session that installed PuLID/Wan 2.2 — not yet executed)
+## LEGACY Pipeline (superseded 27 Aug 2026) — InstantID + SVD-XT
+- Face-lock: InstantID (ControlNet-based)
+- Checkpoint: DreamShaperXL (`dreamshaperXL_alpha2Xl10`)
+- Video: SVD img2vid-xt-1-1 (SVD-XT)
+- Frame smoothing: RIFE (installed)
+- Was PROVEN and the active target from 24 Jul 2026 until the A/B test concluded. Kept here
+  as reference only — new work should not target this pipeline.
+
+## A/B Test — CONCLUDED 27 Aug 2026
 1. Same reference image, same prompt, both pipelines
-2. Compare: identity lock quality, motion quality, render time
-3. Buddy decides keep/replace based on results
-4. Whichever wins becomes the pipeline `conductor.mjs` targets — do not build Conductor
-   integration for either one blind, ahead of this decision (session rule, 24 Jul 2026)
+2. Compared: identity lock quality, motion quality, render time
+3. **Decision: PuLID + Wan 2.2 wins.** Confirmed by Buddy.
+4. Whichever wins becomes the pipeline `conductor.mjs` targets — that decision is now made;
+   the conductor/script-to-shotlist rewrite is the next concrete step (see Outstanding
+   follow-up above), not a blind build ahead of the decision anymore.
 
 ---
 
@@ -60,14 +67,15 @@ Never remove this from any prompt, regardless of which pipeline generates it.
 ---
 
 ## Rules
-1. Never assume which pipeline is "the" pipeline — check this file's PROVEN/CANDIDATE labels,
-   they get updated the moment the A/B test concludes, not before.
-2. Always append master style seed to every prompt, either pipeline.
+1. PuLID + Wan 2.2 is the ACTIVE pipeline (confirmed 27 Aug 2026) — target it by default.
+   InstantID + SVD-XT is LEGACY reference only. If this ever changes again, it will be a new
+   explicit decision from Buddy, not a re-opened A/B test.
+2. Always append master style seed to every prompt, whichever pipeline is active.
 3. ComfyUI/ComfyUI-MCP work only from local Claude Code — cloud claude.ai sessions cannot
    reach `localhost:8188`.
 4. Windows paths use backslash - never Linux paths in commands.
 5. If VRAM runs out - reduce resolution first, then batch size.
-6. When the A/B test concludes, update this file's PROVEN/CANDIDATE section immediately in
+6. When a pipeline decision changes, update this file's ACTIVE/LEGACY section immediately in
    the same session - do not let it go stale again.
 
 ---
@@ -247,11 +255,13 @@ not one merged string:
 
 ---
 
-## Current Status (24 Jul 2026)
-- ComfyUI: RUNNING, confirmed via MCP health-check
+## Current Status (updated 27 Aug 2026)
+- ComfyUI: RUNNING, confirmed via MCP health-check (last confirmed 24 Jul 2026 - re-verify if stale)
 - ComfyUI<->Claude Code bridge: WORKING (artokun/comfyui-mcp)
-- InstantID + SVD-XT: PROVEN, identity weight tuning toward 1.0 in progress
-- PuLID + Wan 2.2: INSTALLED, A/B test NOT YET RUN
-- SeedVR2: node installed, model weights NOT downloaded
-- `conductor.mjs` (ftf-coworkers repo): still targets old Forge API - needs rewrite once
-  A/B result picks a winning stack (paused by Buddy's explicit decision, 24 Jul 2026)
+- PuLID + Wan 2.2: **ACTIVE — A/B test CONCLUDED, confirmed by Buddy 27 Aug 2026.** This is
+  the pipeline to target for all new generation work.
+- InstantID + SVD-XT: LEGACY — superseded, kept for reference only.
+- SeedVR2: node installed, model weights NOT downloaded — confirm before relying on upscale
+- `conductor.mjs` / `conductor/script-to-shotlist.mjs` (ftf-coworkers repo): still target the
+  old Forge/SDXL API from the legacy pipeline. The blocking decision (which pipeline wins) is
+  now made — the rewrite to target Wan 2.2 is the next concrete engineering step, not yet done.
