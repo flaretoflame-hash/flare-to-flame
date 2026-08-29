@@ -78,11 +78,11 @@ file does not duplicate it — `aisha-motion` is the source of truth for ALP. Re
 | Component | Status | Note |
 |---|---|---|
 | PuLID single-identity face-lock | **CANDIDATE** | installed; not verified working standalone this session — no standalone identity-lock pass on record. Conditions the Flux still stage. Promote to PROVEN only with evidence of a passing run |
-| PuLID two-person ("PuLID-2p") | **BROKEN** | two-identity conditioning fails — identity bleed / one face dominates. Do not retry blind; needs a named fix (separate conditioning paths or regional masking) before another attempt |
+| PuLID two-person ("PuLID-2p") | **BROKEN** | root cause: the per-identity `attn_mask` is **silently dropped** — the node accepts the mask input, runs without error, but never applies it, so both identities condition the whole frame → identity bleed / one face dominates. Do not retry blind; the named fix is to route each identity through its own conditioning path with its mask actually bound (or patch the node so a supplied `attn_mask` is enforced, not ignored) |
 | Flux GGUF still generation | **PROVEN** | `flux1-dev-Q5_K_S` + `t5xxl` Q5_K_M |
 | Wan 2.2 i2v | **PROVEN** | native image-to-video |
-| SeedVR2 upscale | **PROVEN** | weights downloaded, optimization productionized |
-| RIFE frame interpolation | **PROVEN** | |
+| SeedVR2 upscale | **PROVEN** | weights downloaded, optimization productionized. Known bug when chained with RIFE — see RIFE row |
+| RIFE frame interpolation | **PROVEN** | Known bug: **RIFE + SeedVR2 flattens non-mouth motion by ~6–11%** (head turn, hair sway, hand/body micro-motion get damped by the interpolation+upscale pass; mouth/lip motion survives). Motion Guardian isolated the drop. Acceptable for talk-heavy shots; for motion-led shots, cut/reduce the RIFE pass or measure the delta before shipping |
 | AdvancedLivePortrait (ALP) | **CANDIDATE — see `aisha-motion`** | installed and functional, but output does not yet conform to the locked "Aisha Motion Language" 6-state standard in `aisha-motion`. Micro-animation only, 2–4s ceiling; not for full shots. Promote to PROVEN once a clip matches the locked spec |
 | InstantID + SVD-XT | **LEGACY** | was the v2 PROVEN pipeline; lost the A/B to PuLID + Wan 2.2, 29 Aug 2026 |
 | Ken Burns still-motion (Beats 1/6) | **LEGACY** | tested Aug 2026; usable but frozen-face vs. real face performance. Replaced by ALP for Beats 1/6 |
