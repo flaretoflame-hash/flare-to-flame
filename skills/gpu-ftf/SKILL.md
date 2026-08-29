@@ -1,87 +1,269 @@
 ---
 name: gpu-ftf
-description: Local GPU generation status + stack tracker for Flare to Flame. NVIDIA 3060 12GB. Covers the current PROVEN pipeline (InstantID + SVD-XT) and the CANDIDATE pipeline under A/B test (PuLID + Wan 2.2), so this file stops going stale every time the stack moves.
+description: Local GPU generation status + stack tracker for Flare to Flame. NVIDIA 3060 12GB. The lead pipeline is PuLID single-identity -> Flux GGUF still -> Wan 2.2 i2v -> SeedVR2 -> RIFE; the PuLID identity-lock stage is CANDIDATE (not verified standalone this session), the Flux/Wan/SeedVR2/RIFE stages are PROVEN. Carries the component status table (PROVEN / CANDIDATE / BROKEN / LEGACY) and the embedded 99-command Wan 2.2 / Google Flow prompting reference. Use for any question about the local render stack, which pipeline is current, why an old approach was dropped, or Wan 2.2 scene-prompt vocabulary.
 ---
 
-# GPU - Flare to Flame Local Generation Skill (v2, corrected 24 Jul 2026)
+# GPU - Flare to Flame Local Generation Skill (v3, refreshed 29 Aug 2026)
 
 ## Why this file was rewritten
-The previous version of this file was badly out of date — it still said "ComfyUI: NOT YET
-INSTALLED" and described an old Flux SDXL + 4-scene HeyGen-hybrid model that no longer
-reflects reality. Real status as of 24 Jul 2026, confirmed via a live ComfyUI MCP bridge
-health-check: ComfyUI 0.14.1, RTX 3060 (11/12GB VRAM free), PyTorch 2.10.0+cu130, running at
-`http://127.0.0.1:8188`. This file now tracks BOTH pipelines below instead of hardcoding one,
-so it doesn't drift again the next time the stack changes.
+v2 (24 Jul 2026) tracked two pipelines side by side — a PROVEN InstantID + SVD-XT stack and a
+CANDIDATE PuLID + Wan 2.2 stack under an unresolved A/B test. **That A/B test has concluded:
+PuLID + Wan 2.2 won.** InstantID + SVD-XT is now LEGACY. Ken Burns still-motion for Beats 1/6
+was tested in the same period and rejected (frozen-face look) in favour of AdvancedLivePortrait.
+This v3 collapses to a single lead pipeline plus a component status table, and formalises the
+four status labels so the file stops drifting. Note: "PuLID + Wan 2.2 won" is a direction —
+the PuLID single-identity stage itself has not been verified standalone this session and is
+labelled CANDIDATE until it is.
+
+Last stack facts (from session memory, ComfyUI health-check was unreachable at rewrite time —
+server not running): ComfyUI v0.34.0 (confirmed 26 Aug 2026), RTX 3060 12GB, Windows,
+headless target `http://127.0.0.1:8188`. Re-run a health-check at the start of any render session.
+
+---
+
+## Status Vocabulary (LOCKED — these four labels only)
+- **PROVEN** — run end-to-end at least once, output shipped or approved by Buddy. Safe to build
+  automation against.
+- **CANDIDATE** — installed and partially tested, not yet approved as the default. Do NOT target
+  it in `conductor.mjs` or any automation until it is promoted to PROVEN.
+- **BROKEN** — tried, does not work. Documented here so it is not silently retried. Needs a
+  named fix before anyone attempts it again.
+- **LEGACY** — was PROVEN or was the plan, now superseded. Kept for history and for "why don't
+  we just use X" questions. Not for new work.
+
+"ACTIVE" is deliberately not in this set — it was ambiguous between "in use", "working", and
+"in progress". Use PROVEN / CANDIDATE / BROKEN / LEGACY.
 
 ---
 
 ## Hardware Stack (LOCKED)
 - GPU: NVIDIA GeForce RTX 3060, 12GB VRAM
 - OS: Windows
-- ComfyUI: confirmed running at `localhost:8188`, version 0.14.1
-- Claude<->ComfyUI bridge: `artokun/comfyui-mcp` MCP server, wired into local Claude Code
-  `settings.json`. This IS "the comfy skill" Buddy refers to — it's an MCP bridge, not a
-  written skill file. Claude Code (local) can queue workflows, check status, and pull output
+- ComfyUI: headless target `localhost:8188`, v0.34.0 (last confirmed 26 Aug 2026)
+- Claude <-> ComfyUI bridge: the `comfy` plugin MCP server (`plugin:comfy:comfyui`), wired into
+  local Claude Code. Local Claude Code can queue workflows, check status, and pull output
   through it. Cloud claude.ai sessions cannot reach `localhost:8188` — local-only.
 
 ---
 
-## PROVEN Pipeline (working today) — InstantID + SVD-XT
-- Face-lock: InstantID (ControlNet-based), identity weight being tuned toward 1.0
-- Checkpoint: DreamShaperXL (`dreamshaperXL_alpha2Xl10`)
-- Video: SVD img2vid-xt-1-1 (SVD-XT)
-- Frame smoothing: RIFE (installed)
-- This is what `conductor/script-to-shotlist.mjs` in `ftf-coworkers` generates prompts for
-  today (Aisha Visual DNA library, live-read, all 6 beats — not just B-roll scenes).
+## Lead Pipeline — PuLID + Wan 2.2
 
-## CANDIDATE Pipeline (installed, under A/B test, NOT YET DECIDED) — PuLID + Wan 2.2
-- Face-lock: PuLID (`cubiq/PuLID_ComfyUI`, SDXL variant matching DreamShaperXL) +
-  InsightFace antelopev2 + EVA-CLIP
-- Video: Wan 2.2 TI2V-5B (text+image->video, native)
-- Upscale: SeedVR2 node installed (`numz/ComfyUI-SeedVR2_VideoUpscaler`), model weights NOT
-  yet downloaded
-- Status: installed, not yet run through a same-image/same-prompt comparison against the
-  proven pipeline. DO NOT treat this as the active pipeline until Buddy confirms the A/B
-  result and explicitly says which one wins.
+Chain: **PuLID (single-identity face-lock) -> Flux (GGUF still) -> Wan 2.2 i2v -> SeedVR2 upscale -> RIFE interpolation**
 
-## A/B Test Plan (from the session that installed PuLID/Wan 2.2 — not yet executed)
-1. Same reference image, same prompt, both pipelines
-2. Compare: identity lock quality, motion quality, render time
-3. Buddy decides keep/replace based on results
-4. Whichever wins becomes the pipeline `conductor.mjs` targets — do not build Conductor
-   integration for either one blind, ahead of this decision (session rule, 24 Jul 2026)
+Direction chosen after the A/B against InstantID + SVD-XT. The four downstream stages are
+PROVEN; the identity-lock stage is CANDIDATE (see status table) pending a standalone pass.
+
+| Stage | Component | Notes |
+|---|---|---|
+| Identity lock | PuLID (`cubiq/PuLID_ComfyUI`) + InsightFace antelopev2 + EVA-CLIP | **CANDIDATE** — installed, not verified working standalone this session. Single subject only; two-person is BROKEN (see status table) |
+| Still / keyframe | Flux, GGUF-quantized (`flux1-dev-Q5_K_S`, `t5xxl-encoder-Q5_K_M`) | quant chosen to fit 12GB; PuLID conditions this stage |
+| Video | Wan 2.2 i2v (image-to-video) | one prompt = one continuous take (see Transitions section) |
+| Upscale | SeedVR2 (`numz/ComfyUI-SeedVR2_VideoUpscaler`) | weights downloaded; optimization productionized (Beat 1 +33.3%, Beat 6 +44.4%) |
+| Frame interpolation | RIFE | final smoothing pass |
+
+This is the stack `conductor` / `script-to-shotlist.mjs` in `ftf-coworkers` should target once
+that code is rewritten off the old Forge API — but do not wire automation to the PuLID
+identity-lock stage until it is PROVEN (see Status Vocabulary).
+
+### Face animation micro-moments — not in this file
+Short talking / blink / smile beats for Aisha (2–4s each) are AdvancedLivePortrait, and the
+locked 6-state command sequence + parameter table live in the **`aisha-motion` skill**. This
+file does not duplicate it — `aisha-motion` is the source of truth for ALP. Referred to here as
+"ALP".
 
 ---
 
-## Master Style Seed (LOCKED - ALWAYS APPEND, both pipelines)
+## Component Status Table
+
+| Component | Status | Note |
+|---|---|---|
+| PuLID single-identity face-lock | **CANDIDATE** | installed; not verified working standalone this session — no standalone identity-lock pass on record. Conditions the Flux still stage. Promote to PROVEN only with evidence of a passing run |
+| PuLID two-person ("PuLID-2p") | **BROKEN** | two-identity conditioning fails — identity bleed / one face dominates. Do not retry blind; needs a named fix (separate conditioning paths or regional masking) before another attempt |
+| Flux GGUF still generation | **PROVEN** | `flux1-dev-Q5_K_S` + `t5xxl` Q5_K_M |
+| Wan 2.2 i2v | **PROVEN** | native image-to-video |
+| SeedVR2 upscale | **PROVEN** | weights downloaded, optimization productionized |
+| RIFE frame interpolation | **PROVEN** | |
+| AdvancedLivePortrait (ALP) | **CANDIDATE — see `aisha-motion`** | installed and functional, but output does not yet conform to the locked "Aisha Motion Language" 6-state standard in `aisha-motion`. Micro-animation only, 2–4s ceiling; not for full shots. Promote to PROVEN once a clip matches the locked spec |
+| InstantID + SVD-XT | **LEGACY** | was the v2 PROVEN pipeline; lost the A/B to PuLID + Wan 2.2, 29 Aug 2026 |
+| Ken Burns still-motion (Beats 1/6) | **LEGACY** | tested Aug 2026; usable but frozen-face vs. real face performance. Replaced by ALP for Beats 1/6 |
+| DreamShaperXL checkpoint | **LEGACY** | belonged to the InstantID + SVD-XT stack |
+
+---
+
+## Master Style Seed (LOCKED — ALWAYS APPEND)
 "luxury Indian salon, warm golden lighting, shallow DOF, bokeh, 35mm film grain"
-Never remove this from any prompt, regardless of which pipeline generates it.
+Never remove this from any prompt, any stage.
 
 ---
 
 ## Rules
-1. Never assume which pipeline is "the" pipeline — check this file's PROVEN/CANDIDATE labels,
-   they get updated the moment the A/B test concludes, not before.
-2. Always append master style seed to every prompt, either pipeline.
-3. ComfyUI/ComfyUI-MCP work only from local Claude Code — cloud claude.ai sessions cannot
+1. Check the Component Status Table before assuming anything is available. Labels get updated
+   the moment a status changes, in the same session — do not let this file go stale.
+2. Always append the Master Style Seed to every prompt.
+3. PuLID-2p is BROKEN. Do not attempt two-person identity lock without a named fix — flag it
+   to Buddy instead.
+4. Face animation (blink / smile / talk micro-beats) is ALP and lives in `aisha-motion` — do
+   not re-derive it here.
+5. ComfyUI / comfy-MCP work only from local Claude Code — cloud claude.ai sessions cannot
    reach `localhost:8188`.
-4. Windows paths use backslash - never Linux paths in commands.
-5. If VRAM runs out - reduce resolution first, then batch size.
-6. When the A/B test concludes, update this file's PROVEN/CANDIDATE section immediately in
-   the same session - do not let it go stale again.
+6. Windows paths use backslash — never Linux paths in commands.
+7. If VRAM runs out — reduce resolution first, then batch size.
 
 ---
 
 ## Wan 2.2 / Flow Prompting Reference — 99 Commands
 
-Full command library: https://app.notion.com/p/3c742284cc2281eda9bbf8f04f7d53a9?pvs=204
-(9 categories, 99 /commands, use this Notion page as the lookup source — this section is the decision layer that picks from it.)
+Canonical source: https://app.notion.com/p/3c742284cc2281eda9bbf8f04f7d53a9?pvs=204
+The full 9-category table is **mirrored below** (synced 2026-08-29) so coworkers do not need
+Notion access mid-session. If the Notion page changes, re-sync this section.
 
 ### Why this section exists
-Coworkers writing scripts/shot-lists should not freestyle camera language.
-They pick from a fixed 99-command vocabulary, using the scene-mood table below,
-then fill the fixed template. This keeps every Wan 2.2 / Flow prompt consistent
-with FTF's cinematic style instead of drifting shot to shot.
+Coworkers writing scripts / shot-lists do not freestyle camera language. They pick from this
+fixed vocabulary using the Scene-Mood table, then fill the fixed template. This keeps every
+Wan 2.2 / Flow prompt consistent with FTF's cinematic style instead of drifting shot to shot.
+
+Note: three tokens are cross-listed across categories in the published list — `/cinematic`
+(1 & 84), `/rimlight` (39 & 91), `/closeup` (3 & 97). That is intentional; the list is "99"
+as published.
+
+---
+
+### The 99 Commands (mirrored from Notion, synced 2026-08-29)
+
+#### 1. Camera & Movement (1–11)
+| # | Command | What it does |
+|---|---|---|
+| 1 | /cinematic | Create a cinematic video shot |
+| 2 | /droneview | Generate an aerial drone perspective |
+| 3 | /closeup | Create an intense cinematic close-up |
+| 4 | /wideangle | Generate a dramatic wide shot |
+| 5 | /orbit | Smoothly orbit around the subject |
+| 6 | /dollyin | Slowly push the camera toward the subject |
+| 7 | /dollyout | Dramatically pull the camera away |
+| 8 | /tracking | Track the subject while moving |
+| 9 | /slowmotion | Create dramatic slow-motion action |
+| 10 | /timelapse | Show time passing rapidly |
+| 11 | /hyperlapse | Create fast cinematic camera movement |
+
+#### 2. Advanced Camera Angles (12–22)
+| # | Command | What it does |
+|---|---|---|
+| 12 | /lowangle | Shoot from below for a powerful look |
+| 13 | /highangle | Shoot from above for a dramatic perspective |
+| 14 | /overhead | Create a straight-down top view |
+| 15 | /pov | Show the scene from a first-person perspective |
+| 16 | /overtheshoulder | Create an over-the-shoulder shot |
+| 17 | /establishing | Create a cinematic establishing shot |
+| 18 | /rackfocus | Smoothly shift focus between subjects |
+| 19 | /handheld | Create realistic handheld camera motion |
+| 20 | /steadicam | Create smooth walking camera movement |
+| 21 | /craneup | Lift the camera upward dramatically |
+| 22 | /cranedown | Lower the camera smoothly |
+
+#### 3. Motion & Action (23–33)
+| # | Command | What it does |
+|---|---|---|
+| 23 | /running | Show dynamic running motion |
+| 24 | /walking | Create natural walking movement |
+| 25 | /turnaround | Smoothly rotate the subject |
+| 26 | /reveal | Dramatically reveal the subject or scene |
+| 27 | /entrance | Create a cinematic character entrance |
+| 28 | /exit | Create a dramatic scene exit |
+| 29 | /freeze | Freeze the action dramatically |
+| 30 | /speedramp | Transition between fast and slow motion |
+| 31 | /bullettime | Create a bullet-time camera effect |
+| 32 | /floating | Make the subject appear to float |
+| 33 | /falling | Create dramatic falling action |
+
+#### 4. Cinematic Lighting (34–44)
+| # | Command | What it does |
+|---|---|---|
+| 34 | /goldenhour | Warm cinematic sunset lighting |
+| 35 | /bluehour | Cool atmospheric twilight lighting |
+| 36 | /neonlight | Create vibrant cinematic neon lighting |
+| 37 | /moody | Create dark, dramatic cinematic lighting |
+| 38 | /softlight | Create soft diffused studio lighting |
+| 39 | /rimlight | Add dramatic edge lighting |
+| 40 | /silhouette | Create a powerful silhouette shot |
+| 41 | /spotlight | Highlight the subject with focused light |
+| 42 | /volumetric | Add cinematic light rays and atmosphere |
+| 43 | /backlight | Create strong backlit visuals |
+| 44 | /nightscene | Create a realistic cinematic night scene |
+
+#### 5. Composition & Framing (45–55)
+| # | Command | What it does |
+|---|---|---|
+| 45 | /wide | Use a wide composition to show the full scene |
+| 46 | /tight | Use a tight frame to focus on the subject |
+| 47 | /minimal | Create a clean minimal composition |
+| 48 | /leadinglines | Use leading lines to guide the viewer's eye |
+| 49 | /ruleofthirds | Apply the rule of thirds for balanced framing |
+| 50 | /symmetry | Create a symmetrical composition |
+| 51 | /foreground | Add strong foreground elements for depth |
+| 52 | /framewithinframe | Use natural frames within the scene |
+| 53 | /diagonal | Use diagonal composition for dynamic shots |
+| 54 | /centered | Place the subject in the center |
+| 55 | /negativespace | Use negative space for a powerful impact |
+
+#### 6. Camera Effects (56–66)
+| # | Command | What it does |
+|---|---|---|
+| 56 | /motionblur | Add motion blur for speed and movement |
+| 57 | /zoomblur | Apply zoom blur for dramatic effect |
+| 58 | /bokeh | Create background bokeh effect |
+| 59 | /lensflare | Add cinematic lens flare |
+| 60 | /vignette | Darken the edges for a cinematic look |
+| 61 | /splittone | Apply split tone color grading |
+| 62 | /monochrome | Convert the scene to black & white |
+| 63 | /radialblur | Apply radial blur for a dynamic look |
+| 64 | /prism | Add prism light refraction effect |
+| 65 | /glitch | Add glitch effect for a digital vibe |
+| 66 | /filmgrain | Add film grain for a vintage feel |
+
+#### 7. Focus & Depth (67–77)
+| # | Command | What it does |
+|---|---|---|
+| 67 | /macro | Capture extreme close-up details |
+| 68 | /shallowdepth | Create a shallow depth of field |
+| 69 | /deepfocus | Keep foreground and background sharp |
+| 70 | /selectivefocus | Focus on the subject while blurring the rest |
+| 71 | /eyefocus | Sharpen the eyes for an intense look |
+| 72 | /centerfocus | Keep the center in focus with blurred surroundings |
+| 73 | /tunnelfocus | Create a tunnel effect to draw attention |
+| 74 | /focusstack | Combine multiple focus points for sharpness |
+| 75 | /dropfocus | Focus on a specific droplet or detail |
+| 76 | /manualfocus | Manually control the focus for precision |
+| 77 | /bokehshape | Customize the shape of bokeh lights |
+
+#### 8. Color Grading (78–88)
+| # | Command | What it does |
+|---|---|---|
+| 78 | /warm | Apply warm tones for a cozy feel |
+| 79 | /cool | Apply cool tones for a calm mood |
+| 80 | /contrast | Increase contrast for bold visuals |
+| 81 | /exposure | Adjust brightness and exposure levels |
+| 82 | /saturation | Enhance or reduce color vibrancy |
+| 83 | /desaturate | Reduce color for a muted look |
+| 84 | /cinematic | Apply cinematic color grade |
+| 85 | /tealorange | Apply teal and orange color grading |
+| 86 | /vibrant | Boost colors for a vibrant look |
+| 87 | /bw | Convert to black and white |
+| 88 | /neon | Apply neon color grading effect |
+
+#### 9. Portrait & Subject (89–99)
+| # | Command | What it does |
+|---|---|---|
+| 89 | /portrait | Create a beautiful portrait shot |
+| 90 | /beauty | Enhance natural beauty and skin tones |
+| 91 | /rimlight | Add rim lighting around the subject |
+| 92 | /backgroundblur | Blur the background to highlight subject |
+| 93 | /sharpfocus | Keep the subject sharp and clear |
+| 94 | /monotone | Apply black & white portrait effect |
+| 95 | /lowkey | Create a dark low key effect |
+| 96 | /highkey | Create a bright high key effect |
+| 97 | /closeup | Capture detailed close-up shot |
+| 98 | /fullbody | Show full body of the subject |
+| 99 | /candid | Create a natural candid moment |
 
 ---
 
@@ -247,11 +429,17 @@ not one merged string:
 
 ---
 
-## Current Status (24 Jul 2026)
-- ComfyUI: RUNNING, confirmed via MCP health-check
-- ComfyUI<->Claude Code bridge: WORKING (artokun/comfyui-mcp)
-- InstantID + SVD-XT: PROVEN, identity weight tuning toward 1.0 in progress
-- PuLID + Wan 2.2: INSTALLED, A/B test NOT YET RUN
-- SeedVR2: node installed, model weights NOT downloaded
-- `conductor.mjs` (ftf-coworkers repo): still targets old Forge API - needs rewrite once
-  A/B result picks a winning stack (paused by Buddy's explicit decision, 24 Jul 2026)
+## Current Status (29 Aug 2026)
+- ComfyUI: last confirmed v0.34.0 (26 Aug 2026); health-check unreachable at rewrite (server
+  not running) — re-run before any render session
+- ComfyUI <-> Claude Code bridge: `plugin:comfy:comfyui`
+- PuLID + Wan 2.2: chosen direction (A/B concluded 29 Aug 2026). Flux GGUF / Wan 2.2 i2v /
+  SeedVR2 / RIFE stages **PROVEN**
+- PuLID single-identity face-lock: **CANDIDATE** — not verified standalone this session
+- SeedVR2: **PROVEN**, weights downloaded, optimization productionized
+- PuLID two-person: **BROKEN** — needs a named fix
+- ALP (AdvancedLivePortrait): **CANDIDATE** — functional but diverges from the locked
+  "Aisha Motion Language" spec; standard lives in `aisha-motion` skill
+- InstantID + SVD-XT, Ken Burns Beat 1/6, DreamShaperXL: **LEGACY**
+- `conductor.mjs` (ftf-coworkers repo): still targets old Forge API — needs rewrite to the
+  PuLID + Wan 2.2 chain (hold the identity-lock stage until PuLID-1p is PROVEN)
