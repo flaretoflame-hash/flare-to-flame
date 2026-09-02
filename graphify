@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Thin wrapper so `./graphify . --code-only` works from repo root.
+exec node "$(dirname "$0")/tools/graphify.mjs" "$@"
