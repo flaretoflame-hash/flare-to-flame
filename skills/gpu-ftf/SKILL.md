@@ -9,7 +9,7 @@ description: Local GPU generation status + stack tracker for Flare to Flame. NVI
 The previous version of this file was badly out of date — it still said "ComfyUI: NOT YET
 INSTALLED" and described an old Flux SDXL + 4-scene HeyGen-hybrid model that no longer
 reflects reality. Real status as of 24 Jul 2026, confirmed via a live ComfyUI MCP bridge
-health-check: ComfyUI 0.14.1, RTX 3060 (11/12GB VRAM free), PyTorch 2.10.0+cu130, running at
+health-check: ComfyUI 0.34.0 (updated from 0.14.1 on 7 Sep 2026), RTX 3060 (11/12GB VRAM free), PyTorch 2.10.0+cu130, running at
 `http://127.0.0.1:8188`. This file now tracks BOTH pipelines below instead of hardcoding one,
 so it doesn't drift again the next time the stack changes.
 
@@ -18,7 +18,7 @@ so it doesn't drift again the next time the stack changes.
 ## Hardware Stack (LOCKED)
 - GPU: NVIDIA GeForce RTX 3060, 12GB VRAM
 - OS: Windows
-- ComfyUI: confirmed running at `localhost:8188`, version 0.14.1
+- ComfyUI: confirmed running at `localhost:8188`, version 0.34.0 (updated 7 Sep 2026)
 - Claude<->ComfyUI bridge: `artokun/comfyui-mcp` MCP server, wired into local Claude Code
   `settings.json`. This IS "the comfy skill" Buddy refers to — it's an MCP bridge, not a
   written skill file. Claude Code (local) can queue workflows, check status, and pull output
@@ -255,3 +255,12 @@ not one merged string:
 - SeedVR2: node installed, model weights NOT downloaded
 - `conductor.mjs` (ftf-coworkers repo): still targets old Forge API - needs rewrite once
   A/B result picks a winning stack (paused by Buddy's explicit decision, 24 Jul 2026)
+
+---
+
+## Wan 2.2 TI2V-5B B-roll - motion-fix settings (added 19 Sep 2026, CANDIDATE until Buddy approves the clips)
+Why: ANGLE-016 Beats 2/3/5 B-roll (generated 21-24 Aug) read as static. Their workflows used WanImageToVideo with no start image, no ModelSamplingSD3, 480x832, 49 frames at 16 fps, cfg 6 and an English-only negative. The official ComfyUI 5B template (Comfy-Org/workflow_templates, video_wan2_2_5B_ti2v.json) uses Wan22ImageToVideoLatent, ModelSamplingSD3 shift 8, 1280x704, 121 frames at 24 fps, 20 steps, cfg 5, uni_pc / simple, and a negative prompt that penalises static frames.
+Settings used (portrait): Wan22ImageToVideoLatent 704x1280, 121 frames, batch 1 -> ModelSamplingSD3 shift 8 -> KSampler 20 steps, cfg 5, uni_pc, simple, denoise 1 -> VAEDecodeTiled 256/64/64/8 -> CreateVideo 24 fps. Files: Wan2.2-TI2V-5B-Q5_K_S.gguf, umt5_xxl_fp8_e4m3fn_scaled.safetensors, wan2.2_vae.safetensors. ComfyUI 0.34.0.
+Prompt rule: keep the locked beat prompt text unchanged, append one "Motion:" sentence built only from camera, light, or the beat's own action. Negative = official Wan negative + the FTF negatives.
+Runner: ftf-coworkers/conductor/conductor-runs/angle-016/workflows/broll_motionfix.py (Beats 2, 3, 5). Beat 4 is excluded: its promoted PROPFIX version uses start-image prop conditioning. The runner stops before generating if any node, input or model name differs from the installed ComfyUI, then prints old-vs-new motion scores.
+Status: not yet run on the GPU as of 19 Sep 2026. Replace this line with the measured result.
