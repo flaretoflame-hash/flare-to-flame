@@ -258,9 +258,15 @@ not one merged string:
 
 ---
 
-## Wan 2.2 TI2V-5B B-roll - motion-fix settings (added 19 Sep 2026, CANDIDATE until Buddy approves the clips)
-Why: ANGLE-016 Beats 2/3/5 B-roll (generated 21-24 Aug) read as static. Their workflows used WanImageToVideo with no start image, no ModelSamplingSD3, 480x832, 49 frames at 16 fps, cfg 6 and an English-only negative. The official ComfyUI 5B template (Comfy-Org/workflow_templates, video_wan2_2_5B_ti2v.json) uses Wan22ImageToVideoLatent, ModelSamplingSD3 shift 8, 1280x704, 121 frames at 24 fps, 20 steps, cfg 5, uni_pc / simple, and a negative prompt that penalises static frames.
-Settings used (portrait): Wan22ImageToVideoLatent 704x1280, 121 frames, batch 1 -> ModelSamplingSD3 shift 8 -> KSampler 20 steps, cfg 5, uni_pc, simple, denoise 1 -> VAEDecodeTiled 256/64/64/8 -> CreateVideo 24 fps. Files: Wan2.2-TI2V-5B-Q5_K_S.gguf, umt5_xxl_fp8_e4m3fn_scaled.safetensors, wan2.2_vae.safetensors. ComfyUI 0.34.0.
-Prompt rule: keep the locked beat prompt text unchanged, append one "Motion:" sentence built only from camera, light, or the beat's own action. Negative = official Wan negative + the FTF negatives.
-Runner: ftf-coworkers/conductor/conductor-runs/angle-016/workflows/broll_motionfix.py (Beats 2, 3, 5). Beat 4 is excluded: its promoted PROPFIX version uses start-image prop conditioning. The runner stops before generating if any node, input or model name differs from the installed ComfyUI, then prints old-vs-new motion scores.
+---
+
+## Wan 2.2 TI2V-5B B-roll - generation profiles (added 19 Sep 2026, CANDIDATE until Buddy approves the clips)
+WAN_5B_3060_STANDARD: Wan22ImageToVideoLatent 704x1280, 81 frames, batch 1 -> ModelSamplingSD3 shift 8 (shift 5 under test on Beat 3) -> KSampler 20 steps, CFG 5, uni_pc, simple, denoise 1 -> VAEDecodeTiled 256/64/64/8 -> CreateVideo 24 fps. Files: Wan2.2-TI2V-5B-Q5_K_S.gguf, umt5_xxl_fp8_e4m3fn_scaled.safetensors, wan2.2_vae.safetensors. ComfyUI 0.34.0.
+WAN_5B_3060_EXTENDED: same, 121 frames. Use only after a successful VRAM test on the 3060.
+Source of the settings: official ComfyUI 5B template (CFG 5, shift 8, 24 fps) and Wan's own config (CFG 5, shift 5, 24 fps, 121 frames). Old Beats 2/3/5 workflows (WanImageToVideo, no ModelSamplingSD3, 480x832, 49 frames at 16 fps, CFG 6) are superseded.
+Prompt rule (locked): every Wan B-roll prompt = the locked beat prompt unchanged + one "Motion:" sentence. The Motion sentence = one camera move from the beat's allowed list in `.claude/libraries/motion-emotion-mapping.md` + one subject or light action. A camera move of "Static" still needs a subject or light action. Static description alone is never enough.
+Camera move per beat: Vulnerability = Handheld Drift (never shaky) | Transformation = Slow Push In / Orbit / Slow reveal | Detail = Static / Slider (near-still by design) | Atmosphere = Lateral Slide | Invitation = Slow Pull Back / Static hold.
+Negative: official Wan negative (includes static-frame terms) + the FTF negatives.
+Runner: ftf-coworkers/conductor/conductor-runs/angle-016/workflows/broll_motionfix.py (Beats 2, 3, 5; profiles standard / extended; outputs tagged _s<shift>_f<frames>). Beat 4 is excluded: its promoted PROPFIX version uses start-image prop conditioning. The runner stops before generating if any node, input or model name differs from the installed ComfyUI, then prints old-vs-new motion scores.
+Open Buddy decision: Beat 5 Atmosphere = room shot with lateral slide (motion-emotion-mapping.md). Notion Aesthetic Reference Library (25 Aug review) asks for dryer/towel action instead. Runner keeps the room shot.
 Status: not yet run on the GPU as of 19 Sep 2026. Replace this line with the measured result.
