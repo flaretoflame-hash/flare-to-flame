@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flare to Flame — Luxury Salon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════
+   FLARE TO FLAME — COMPLETE APP
+   Replace 10 values below to go live
+════════════════════════════════════════ */
+
+:root{
+  --gold:#C9A84C;
+  --dark:#121212;
+  --bg:#f5f2ee;
+  --white:#ffffff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);}
+
+/* ── OFFERS TICKER ── */
+#offersBanner{
+  display:none;background:var(--gold);
+  padding:10px 0;overflow:hidden;cursor:pointer;
+}
+#offersBanner a{text-decoration:none;display:block;overflow:hidden;}
+.ticker-track{display:flex;white-space:nowrap;animation:tickerScroll 20s linear infinite;}
+.ticker-text{font-size:13px;font-weight:600;color:#fff;letter-spacing:0.4px;padding-right:80px;flex-shrink:0;}
+@keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ── HEADER ── */
+.header{
+  background:#fff;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(201,168,76,0.15);
+  box-shadow:0 1px 8px rgba(0,0,0,0.04);
+  position:sticky;top:0;z-index:100;
+}
+.header-left{display:flex;align-items:center;gap:12px;}
+.logo-img{
+  width:42px;height:42px;border-radius:50%;
+  object-fit:cover;border:2px solid var(--gold);
+}
+.logo-fallback{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--gold);color:#fff;
+  font-size:16px;font-weight:700;
+  display:none;align-items:center;justify-content:center;
+}
+.brand-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:600;
+  color:var(--dark);letter-spacing:0.3px;line-height:1.1;
+}
+.brand-sub{font-size:10px;color:#AAA;letter-spacing:0.4px;}
+.staff-login{
+  font-size:12px;font-weight:700;color:var(--gold);
+  cursor:pointer;border-bottom:1px solid rgba(201,168,76,0.4);
+  padding-bottom:1px;letter-spacing:0.3px;
+}
+
+/* ── HERO ── */
+.hero{
+  background:#fff;padding:32px 24px;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:20px;
+  border-bottom:1px solid rgba(201,168,76,0.1);
+}
+.hero-left{flex:1;}
+.gold-bar{display:flex;align-items:flex-start;gap:14px;}
+.gold-line{
+  width:3px;min-height:56px;background:var(--gold);
+  border-radius:2px;flex-shrink:0;margin-top:4px;
+}
+.tagline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:30px;font-weight:600;
+  color:var(--dark);line-height:1.2;letter-spacing:0.2px;
+}
+.tagline-sub{
+  font-size:12px;color:var(--gold);
+  font-style:italic;letter-spacing:0.5px;margin-top:8px;
+}
+.hero-right{flex-shrink:0;text-align:center;}
+.aisha-wrap{position:relative;width:130px;height:130px;margin:0 auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.aisha-glow{
+  position:absolute;inset:-4px;border-radius:50%;
+  background:conic-gradient(var(--gold),rgba(201,168,76,0.1),var(--gold));
+  animation:spin 8s linear infinite;opacity:0.5;
+}
+.aisha-img{
+  width:130px;height:130px;border-radius:50%;
+  object-fit:cover;object-position:center top;
+  border:3.5px solid var(--gold);
+  position:relative;z-index:1;
+  box-shadow:0 4px 20px rgba(201,168,76,0.2);
+}
+.aisha-fallback{
+  width:130px;height:130px;border-radius:50%;
+  border:3.5px solid var(--gold);background:#F5F0E8;
+  display:none;align-items:center;justify-content:center;
+  font-size:10px;color:var(--gold);text-align:center;
+  padding:12px;line-height:1.5;position:relative;z-index:1;
+}
+.aisha-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;color:var(--gold);font-weight:500;
+  margin-top:10px;letter-spacing:0.3px;
+}
+.aisha-sub{font-size:10px;color:#AAA;font-style:italic;margin-top:2px;}
+
+/* ── SERVICES SECTION ── */
+.svc-section{background:#fff;padding:28px 24px 0;}
+.svc-heading{font-size:26px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+.svc-subtitle{font-size:13px;color:#888;margin-bottom:20px;}
+
+.search{
+  width:100%;padding:13px 16px;
+  border:1.5px solid #eee;border-radius:16px;
+  background:#f9f9f9;font-size:14px;
+  font-family:'Inter',sans-serif;
+  margin-bottom:12px;
+}
+.search:focus{outline:none;border-color:rgba(201,168,76,0.5);}
+
+.filter-row{display:flex;gap:12px;margin-bottom:10px;}
+.filter-box{
+  flex:1;padding:13px 14px;
+  border:1.5px solid #eee;border-radius:14px;
+  background:#fff;font-size:13px;
+  font-family:'Inter',sans-serif;color:#555;
+  cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C9A84C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  padding-right:30px;
+}
+.filter-box:focus{outline:none;border-color:var(--gold);}
+
+.staff-row{
+  display:flex;justify-content:flex-end;
+  padding:6px 0 16px;
+}
+.staff-login-inline{
+  font-size:11.5px;font-weight:700;
+  color:var(--gold);cursor:pointer;
+  border-bottom:1px solid rgba(201,168,76,0.35);
+  padding-bottom:1px;letter-spacing:0.3px;
+}
+
+/* ── CARDS ── */
+.cards-grid{
+  display:flex;flex-direction:column;
+  gap:20px;padding:0 24px;
+}
+
+.service-card{
+  position:relative;
+  display:flex;align-items:center;
+  gap:24px;padding:24px;
+  border-radius:30px;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.75);
+  overflow:hidden;
+  box-shadow:0 12px 42px rgba(0,0,0,0.06),
+             inset 0 1px 0 rgba(255,255,255,0.8);
+  transition:transform .45s cubic-bezier(.22,.68,0,1.2),
+             box-shadow .45s ease;
+}
+.service-card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:0 22px 58px rgba(0,0,0,0.1),
+             inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Card background palette wash */
+.service-card.cat-hair      {background:linear-gradient(115deg,rgba(255,210,180,0.6),rgba(255,238,218,0.75));}
+.service-card.cat-skin      {background:linear-gradient(115deg,rgba(150,228,212,0.5),rgba(208,248,240,0.7));}
+.service-card.cat-makeup    {background:linear-gradient(115deg,rgba(255,185,210,0.55),rgba(255,225,237,0.75));}
+.service-card.cat-grooming  {background:linear-gradient(115deg,rgba(155,190,255,0.5),rgba(210,225,255,0.7));}
+.service-card.cat-waxing    {background:linear-gradient(115deg,rgba(255,192,155,0.55),rgba(255,228,205,0.75));}
+.service-card.cat-nails     {background:linear-gradient(115deg,rgba(255,160,215,0.55),rgba(255,210,238,0.75));}
+.service-card.cat-threading {background:linear-gradient(115deg,rgba(200,162,255,0.5),rgba(228,210,255,0.7));}
+.service-card.cat-signature {background:linear-gradient(115deg,rgba(201,168,76,0.28),rgba(242,228,182,0.5));}
+
+/* ── VISUAL TILE ── */
+.visual-tile{
+  position:relative;
+  width:120px;height:120px;
+  border-radius:24px;
+  overflow:hidden;flex-shrink:0;
+  box-shadow:
+    inset 0 2px 14px rgba(255,255,255,0.88),
+    0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* Image thumbnail */
+.visual-tile img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  display:block;
+  position:relative;z-index:1;
+}
+
+/* CSS fallback if no image */
+.visual-tile .css-bg{
+  position:absolute;inset:0;z-index:0;
+  animation:liquidMove 17s ease-in-out infinite alternate;
+}
+.visual-tile::after{
+  content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(135deg,rgba(255,255,255,0.6),rgba(255,255,255,0.04));
+  mix-blend-mode:screen;pointer-events:none;
+}
+
+/* Gloss on thumbnail */
+.tile-gloss{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(145deg,rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.1) 30%,transparent 55%);
+}
+
+@keyframes liquidMove{
+  0%  {transform:rotate(0deg)   scale(1)    translate(0,0);}
+  30% {transform:rotate(6deg)   scale(1.08) translate(-5px,5px);}
+  60% {transform:rotate(-4deg)  scale(1.12) translate(6px,-6px);}
+  100%{transform:rotate(3deg)   scale(1)    translate(2px,-2px);}
+}
+
+/* CSS fallback palettes */
+.bg-hair::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#ffb38f,transparent 34%),radial-gradient(circle at 20% 75%,#ffe9df,transparent 38%),radial-gradient(circle at 75% 80%,#ffd2c3,transparent 34%),radial-gradient(circle at 50% 50%,#ff9966,transparent 40%);}
+.bg-skin::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#8fe2d1,transparent 35%),radial-gradient(circle at 25% 70%,#d7fff4,transparent 38%),radial-gradient(circle at 80% 75%,#6bcfb9,transparent 34%),radial-gradient(circle at 50% 50%,#3cc8b0,transparent 40%);}
+.bg-makeup::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 75% 25%,#ff9bbf,transparent 34%),radial-gradient(circle at 20% 75%,#ffe0ea,transparent 36%),radial-gradient(circle at 75% 75%,#ffc3d8,transparent 32%),radial-gradient(circle at 50% 50%,#ff70a8,transparent 40%);}
+.bg-grooming::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#9ac7ff,transparent 35%),radial-gradient(circle at 25% 70%,#d7ebff,transparent 38%),radial-gradient(circle at 80% 75%,#79a9ff,transparent 34%),radial-gradient(circle at 50% 50%,#4880f0,transparent 40%);}
+.bg-waxing::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#ffc8a2,transparent 35%),radial-gradient(circle at 25% 70%,#fff0e4,transparent 38%),radial-gradient(circle at 80% 75%,#ffb178,transparent 34%),radial-gradient(circle at 50% 50%,#f0905a,transparent 40%);}
+.bg-nails::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#ffd0e5,transparent 35%),radial-gradient(circle at 25% 70%,#fff1f7,transparent 38%),radial-gradient(circle at 80% 75%,#ff9ec7,transparent 34%),radial-gradient(circle at 50% 50%,#ff60b0,transparent 40%);}
+.bg-threading::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#c8b6ff,transparent 35%),radial-gradient(circle at 25% 70%,#eee6ff,transparent 38%),radial-gradient(circle at 80% 75%,#b49eff,transparent 34%),radial-gradient(circle at 50% 50%,#9060e0,transparent 40%);}
+.bg-signature::before{background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),transparent 26%),radial-gradient(circle at 70% 25%,#e8d080,transparent 35%),radial-gradient(circle at 25% 70%,#fff8e0,transparent 38%),radial-gradient(circle at 80% 75%,#c9a84c,transparent 34%),radial-gradient(circle at 50% 50%,#b08820,transparent 40%);}
+
+.visual-tile .css-bg{
+  position:absolute;inset:-35%;
+  filter:blur(20px);
+}
+
+/* Category accent text colours */
+.acc-hair      {color:#C07040;}
+.acc-skin      {color:#2A9D8F;}
+.acc-makeup    {color:#C0306A;}
+.acc-grooming  {color:#2A50B0;}
+.acc-waxing    {color:#B06030;}
+.acc-nails     {color:#C0106A;}
+.acc-threading {color:#7030A0;}
+.acc-signature {color:#8B6800;}
+
+/* ── CARD CONTENT ── */
+.content{flex:1;min-width:0;}
+.content h2{
+  font-size:22px;font-weight:600;
+  letter-spacing:-0.4px;color:var(--dark);
+  line-height:1.2;margin-bottom:5px;
+}
+.svc-category{font-size:13px;margin-bottom:10px;font-weight:500;}
+.svc-desc{font-size:13px;line-height:1.7;color:#777;max-width:460px;}
+
+/* ── BOOK BTN ── */
+.book-btn{
+  flex-shrink:0;display:flex;align-items:center;
+  background:linear-gradient(140deg,#D4AE38,#C9A84C,#B89030);
+  border:none;border-radius:50px;
+  padding:11px 13px 11px 19px;
+  cursor:pointer;text-decoration:none;
+  box-shadow:0 5px 20px rgba(175,138,28,0.4),
+             inset 0 1px 0 rgba(255,255,255,0.22);
+  transition:all .3s cubic-bezier(.22,.68,0,1.2);
+  white-space:nowrap;position:relative;z-index:2;
+}
+.book-btn::before{
+  content:'';position:absolute;top:0;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);
+}
+.book-btn:hover{
+  background:linear-gradient(140deg,#B89030,#A07820);
+  transform:scale(1.05) translateY(-2px);
+  box-shadow:0 8px 26px rgba(155,118,20,0.52);
+}
+.book-btn span{
+  font-size:12.5px;font-weight:600;color:#fff;
+  margin-right:10px;font-family:'Inter',sans-serif;
+  text-shadow:0 1px 2px rgba(0,0,0,0.12);
+}
+.book-arr{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;
+}
+
+/* Grain overlay */
+.grain{
+  position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0.035;
+  background-image:url('https://www.transparenttextures.com/patterns/noise.png');
+}
+
+/* ── PAGINATION ── */
+.pagination{
+  display:flex;justify-content:center;
+  gap:10px;padding:24px;flex-wrap:wrap;
+}
+.pagination button{
+  border:none;background:#fff;
+  width:42px;height:42px;border-radius:12px;
+  cursor:pointer;font-size:13px;font-weight:500;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 4px 16px rgba(0,0,0,0.05);
+  transition:all .2s ease;color:#555;
+}
+.pagination button.active{background:var(--dark);color:#fff;}
+.pagination button:hover:not(.active){background:#e8e4de;}
+
+/* ── FOOTER ── */
+.footer{
+  background:var(--dark);padding:22px 24px;
+  text-align:center;margin-top:20px;
+}
+.footer p{color:var(--gold);font-size:12.5px;letter-spacing:0.5px;}
+.footer-line{width:28px;height:1px;background:var(--gold);margin:10px auto;opacity:0.3;}
+.footer-sub{color:#3A3A3A !important;font-size:10px;letter-spacing:0.3px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .hero{flex-direction:column;align-items:flex-start;}
+  .tagline{font-size:22px;}
+  .service-card{flex-direction:column;align-items:flex-start;padding:18px;gap:14px;}
+  .visual-tile{width:100%;height:180px;border-radius:18px;}
+  .content h2{font-size:20px;}
+  .book-btn{align-self:flex-end;}
+  .cards-grid{padding:0 14px;}
+  .svc-section{padding:22px 14px 0;}
+  .filter-row{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+  CREDENTIALS — FILL THESE BEFORE LAUNCH
+════════════════════════════════════════ -->
+<script>
+const AIRTABLE_TOKEN = 'YOUR_TOKEN_HERE';
+const BASE_ID        = 'YOUR_BASE_ID_HERE';
+const WA             = '919718831333';
+
+/* ── 8 THUMBNAIL IMAGES ── Replace with your Cloudinary URLs */
+const THUMBS = {
+  Hair:      'YOUR_HAIR_IMAGE_URL',
+  Skin:      'YOUR_SKIN_IMAGE_URL',
+  Makeup:    'YOUR_MAKEUP_IMAGE_URL',
+  Grooming:  'YOUR_GROOMING_IMAGE_URL',
+  Waxing:    'YOUR_WAXING_IMAGE_URL',
+  Nails:     'YOUR_NAILS_IMAGE_URL',
+  Threading: 'YOUR_THREADING_IMAGE_URL',
+  Signature: 'YOUR_SIGNATURE_IMAGE_URL',
+};
+
+/* ── ASSETS (already wired) ── */
+const LOGO_URL  = 'https://res.cloudinary.com/dlstvhspu/image/upload/flare_to_flame_logo_final_master_qosqoy';
+const AISHA_URL = 'https://drive.google.com/uc?export=view&id=1SfxDgAbs6agba7nxGrFwQTIWjez-y9-q';
+</script>
+
+<!-- OFFERS TICKER -->
+<div id="offersBanner">
+  <a href="https://wa.me/919718831333?text=Tell me about your current offer!" target="_blank">
+    <div class="ticker-track">
+      <div class="ticker-text" id="t1"></div>
+      <div class="ticker-text" id="t2"></div>
+    </div>
+  </a>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <img id="logoImg" alt="logo" class="logo-img"/>
+    <div id="logoFb" class="logo-fallback">F</div>
+    <div>
+      <div class="brand-name">Flare to Flame</div>
+      <div class="brand-sub">Luxury Unisex Salon</div>
+    </div>
+  </div>
+  <div class="staff-login" onclick="alert('Staff login — coming soon')">Staff Login</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="gold-bar">
+      <div class="gold-line"></div>
+      <div>
+        <div class="tagline">Start the Spark. Become the Flame.</div>
+        <div class="tagline-sub">Because Details Define You</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="aisha-wrap">
+      <div class="aisha-glow"></div>
+      <img id="aishaImg" alt="Aisha" class="aisha-img"/>
+      <div id="aishaFb" class="aisha-fallback">Add Aisha's<br/>photo here</div>
+    </div>
+    <div class="aisha-label">Meet Aisha</div>
+    <div class="aisha-sub">First step towards transformation</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="svc-section">
+  <div class="svc-heading">Our Services</div>
+  <div class="svc-subtitle">Because Details Define You</div>
+  <input type="text" class="search" id="srch" placeholder="🔍 Search services..."/>
+  <div class="filter-row">
+    <select class="filter-box" id="catSel">
+      <option value="">Category</option>
+      <option>Hair</option><option>Skin</option><option>Makeup</option>
+      <option>Grooming</option><option>Waxing</option><option>Nails</option>
+      <option>Threading</option><option>Signature</option>
+    </select>
+    <select class="filter-box" id="subSel"><option value="">Subcategory</option></select>
+  </div>
+  <div class="staff-row">
+    <span class="staff-login-inline" onclick="alert('Staff login — coming soon')">Staff Login</span>
+  </div>
+</div>
+
+<!-- CARDS -->
+<div class="cards-grid" id="grid"></div>
+<div class="pagination" id="pag"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Open 8AM – 8PM, Every Day</p>
+  <div class="footer-line"></div>
+  <p class="footer-sub">Flare to Flame · Where precision meets transformation</p>
+</div>
+
+<script>
+/* ════════════════════════
+   MAPS
+════════════════════════ */
+const catClass = {
+  Hair:'cat-hair',Skin:'cat-skin',Makeup:'cat-makeup',
+  Grooming:'cat-grooming',Waxing:'cat-waxing',Nails:'cat-nails',
+  Threading:'cat-threading',Signature:'cat-signature'
+};
+const bgClass = {
+  Hair:'bg-hair',Skin:'bg-skin',Makeup:'bg-makeup',
+  Grooming:'bg-grooming',Waxing:'bg-waxing',Nails:'bg-nails',
+  Threading:'bg-threading',Signature:'bg-signature'
+};
+const accClass = {
+  Hair:'acc-hair',Skin:'acc-skin',Makeup:'acc-makeup',
+  Grooming:'acc-grooming',Waxing:'acc-waxing',Nails:'acc-nails',
+  Threading:'acc-threading',Signature:'acc-signature'
+};
+
+/* ════════════════════════
+   ASSETS
+════════════════════════ */
+const logoImg = document.getElementById('logoImg');
+const logoFb  = document.getElementById('logoFb');
+const aishaImg= document.getElementById('aishaImg');
+const aishaFb = document.getElementById('aishaFb');
+
+logoImg.src = LOGO_URL;
+logoImg.onerror = ()=>{logoImg.style.display='none';logoFb.style.display='flex';};
+
+aishaImg.src = AISHA_URL;
+aishaImg.onerror = ()=>{aishaImg.style.display='none';aishaFb.style.display='flex';};
+
+/* ════════════════════════
+   STATE
+════════════════════════ */
+let services=[], pg=1, cat='', sub='';
+const PER = 5;
+
+/* ════════════════════════
+   FETCH OFFERS
+════════════════════════ */
+async function fetchOffers(){
+  if(AIRTABLE_TOKEN==='YOUR_TOKEN_HERE') return;
+  try{
+    const r = await fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/Offers?filterByFormula=AND({Active}=1,{Visible To Clients}=1)`,
+      {headers:{Authorization:`Bearer ${AIRTABLE_TOKEN}`}}
+    );
+    const d = await r.json();
+    if(d.records && d.records.length){
+      const o = d.records[0].fields;
+      const txt = `✨ ${o['Offer Title']} — ${o['Description']}   ${o['Valid From']?'Valid from '+o['Valid From']:''}`;
+      document.getElementById('t1').textContent = txt;
+      document.getElementById('t2').textContent = txt;
+      document.getElementById('offersBanner').style.display = 'block';
+    }
+  }catch(e){}
+}
+
+/* ════════════════════════
+   FETCH SERVICES
+════════════════════════ */
+async function fetchServices(){
+  if(AIRTABLE_TOKEN==='YOUR_TOKEN_HERE'){
+    document.getElementById('grid').innerHTML =
+      '<p style="text-align:center;padding:48px;color:#C9A84C;font-size:13px;">Add your Airtable credentials to load services.</p>';
+    return;
+  }
+  try{
+    const r = await fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/Services?filterByFormula={Active}=1&sort[0][field]=Sort%20Order&sort[0][direction]=asc`,
+      {headers:{Authorization:`Bearer ${AIRTABLE_TOKEN}`}}
+    );
+    const d = await r.json();
+    if(d.records && d.records.length){
+      services = d.records.map(rec=>({
+        name: rec.fields['Service Name']      || '',
+        cat:  rec.fields['Category']          || '',
+        sub:  rec.fields['Subcategory']       || '',
+        desc: rec.fields['AI Service Description'] || '',
+        wa:   rec.fields['WhatsApp Link']     || ''
+      }));
+      buildSubDropdown();
+      renderCards();
+    }
+  }catch(e){
+    document.getElementById('grid').innerHTML =
+      '<p style="text-align:center;padding:48px;color:#C9A84C;font-size:13px;">Connection error. Check credentials.</p>';
+  }
+}
+
+/* ════════════════════════
+   SUBCATEGORY DROPDOWN
+════════════════════════ */
+function buildSubDropdown(){
+  const sel = document.getElementById('subSel');
+  sel.innerHTML = '<option value="">Subcategory</option>';
+  const subs = [...new Set(services.filter(s=>!cat||s.cat===cat).map(s=>s.sub).filter(Boolean))].sort();
+  subs.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+}
+
+/* ════════════════════════
+   CARD TEMPLATE
+════════════════════════ */
+function createCard(s){
+  const cc  = catClass[s.cat]  || 'cat-hair';
+  const bgc = bgClass[s.cat]   || 'bg-hair';
+  const ac  = accClass[s.cat]  || 'acc-hair';
+  const waLink = s.wa ||
+    `https://wa.me/${WA}?text=Hi! I'd like to book *${encodeURIComponent(s.name)}* at Flare to Flame.`;
+  const desc = s.desc.length > 100 ? s.desc.slice(0,100)+'…' : s.desc;
+  const imgUrl = THUMBS[s.cat] || '';
+  const hasImg = imgUrl && !imgUrl.includes('YOUR_');
+
+  return `
+  <div class="service-card ${cc}">
+    <div class="visual-tile">
+      ${hasImg
+        ? `<img src="${imgUrl}" alt="${s.cat}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>`
+        : ''}
+      <div class="css-bg ${bgc}" style="${hasImg?'display:none':''}"></div>
+      <div class="tile-gloss"></div>
+    </div>
+    <div class="content">
+      <h2>${s.name}</h2>
+      <div class="svc-category ${ac}">${s.cat}</div>
+      <div class="svc-desc">${desc}</div>
+    </div>
+    <a class="book-btn" href="${waLink}" target="_blank">
+      <span>Book Now</span>
+      <div class="book-arr">→</div>
+    </a>
+    <div class="grain"></div>
+  </div>`;
+}
+
+/* ════════════════════════
+   FILTER + RENDER
+════════════════════════ */
+function getFiltered(){
+  const q = document.getElementById('srch').value.toLowerCase();
+  return services.filter(s=>
+    (!cat || s.cat===cat) &&
+    (!sub || s.sub===sub) &&
+    (!q   || s.name.toLowerCase().includes(q) || (s.desc||'').toLowerCase().includes(q))
+  );
+}
+
+function renderCards(){
+  const filtered = getFiltered();
+  const paged = filtered.slice((pg-1)*PER, pg*PER);
+  document.getElementById('grid').innerHTML =
+    paged.length ? paged.map(createCard).join('') :
+    '<p style="text-align:center;padding:48px;color:#CCC;font-size:13px;">No services found.</p>';
+  renderPag(filtered.length);
+}
+
+function renderPag(total){
+  const p = document.getElementById('pag');
+  const pages = Math.ceil(total/PER);
+  p.innerHTML = '';
+  for(let i=1;i<=pages;i++){
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    if(i===pg) btn.classList.add('active');
+    btn.onclick = ()=>{pg=i;renderCards();window.scrollTo({top:0,behavior:'smooth'});};
+    p.appendChild(btn);
+  }
+}
+
+/* ════════════════════════
+   EVENTS
+════════════════════════ */
+document.getElementById('catSel').onchange = function(){
+  cat=this.value; sub=''; pg=1;
+  document.getElementById('subSel').value='';
+  buildSubDropdown(); renderCards();
+};
+document.getElementById('subSel').onchange = function(){
+  sub=this.value; pg=1; renderCards();
+};
+document.getElementById('srch').oninput = ()=>{pg=1;renderCards();};
+
+/* ════════════════════════
+   3D TILT
+════════════════════════ */
+document.addEventListener('mousemove', e=>{
+  document.querySelectorAll('.service-card').forEach(card=>{
+    const r = card.getBoundingClientRect();
+    if(e.clientY<r.top||e.clientY>r.bottom||e.clientX<r.left||e.clientX>r.right) return;
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`translateY(-4px)scale(1.01)rotateX(${-y*3}deg)rotateY(${x*3}deg)`;
+  });
+});
+document.addEventListener('mouseleave', ()=>{
+  document.querySelectorAll('.service-card').forEach(c=>c.style.transform='');
+});
+
+/* ════════════════════════
+   INIT
+════════════════════════ */
+buildSubDropdown();
+fetchOffers();
+fetchServices();
+</script>
+</body>
+</html>
